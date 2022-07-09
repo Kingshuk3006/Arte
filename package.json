@@ -9,12 +9,33 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.9.0",
+    "@emotion/styled": "^11.8.1",
+    "@googlemaps/react-wrapper": "^1.1.34",
+    "@material-ui/core": "^4.12.4",
+    "@mui/icons-material": "^5.6.2",
+    "@mui/material": "^5.7.0",
+    "cloudinary": "^1.30.0",
+    "dotenv": "^16.0.1",
+    "google-maps-react": "^2.0.6",
+    "mongodb": "^4.7.0",
+    "mongoose": "^6.3.6",
+    "multer": "^1.4.5-lts.1",
     "next": "12.1.6",
+    "next-auth": "^4.9.0",
+    "nodemo": "^1.0.0",
+    "nodemon": "^2.0.16",
     "react": "18.1.0",
-    "react-dom": "18.1.0"
+    "react-dom": "18.1.0",
+    "react-google-maps": "^9.4.5",
+    "react-swiper": "^0.1.5",
+    "swiper": "^8.1.4"
   },
   "devDependencies": {
+    "autoprefixer": "^10.4.7",
     "eslint": "8.15.0",
-    "eslint-config-next": "12.1.6"
+    "eslint-config-next": "12.1.6",
+    "postcss": "^8.4.13",
+    "tailwindcss": "^3.0.24"
   }
 }
