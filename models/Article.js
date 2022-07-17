@@ -13,6 +13,11 @@ const ArticleSchema = new mongoose.Schema ({
     required: true,
     default: 'Anonymous Writer',
   },
+  author: {
+    type: String,
+    required: true,
+    default: 'Article Heading',
+  },
   dateofpublish: {
     type: Date,
     required: true,

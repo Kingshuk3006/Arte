@@ -25,15 +25,15 @@ const Navbar = () => {
   };
   return (
     <div>
-      <nav className="flex flex-row h-24 items-center justify-between px-16 mx-auto max-w-[1280px]">
+      <nav className="flex flex-row h-24 items-center justify-between xl:px-16 px-8 mx-auto max-w-[1280px]">
         <div>
           <img src="/images/logo.svg" alt="logo" className="w-20" />
         </div>
-        <div className="hidden md:block">
+        <div className="hidden xl:block">
           <ul className="flex flex-row items-center">
             {navbarList.map (item => {
               return (
-                <Link href="#" key={item}>
+                <Link href={`/${item}`} key={item}>
                   <a>
                     <li className="mx-8 text-white font-Inter text-lg cursor-pointer hover:text-[#F9DBB3]">
                       {item}
@@ -47,14 +47,14 @@ const Navbar = () => {
         <Link href="/login">
           <a>
             <button
-              className={`bg-[#0F0F0F] border-2 border-[#F9DBB3] px-4 py-2 text-white rounded-full hover:border-[#c58d43] hidden md:block `}
+              className={`bg-[#0F0F0F] border-2 border-[#F9DBB3] px-4 py-2 text-white rounded-full hover:border-[#c58d43] hidden xl:block`}
             >
               Sign In
             </button>
           </a>
         </Link>
 
-        <div className="block md:hidden">
+        <div className="block xl:hidden">
           <DrawerSection />
         </div>
       </nav>
