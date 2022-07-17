@@ -5,7 +5,7 @@ import {useSession, signIn, signOut} from 'next-auth/react';
 import {Avatar} from '@material-ui/core';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 const navbarList = [
   'Articles',
   'Near You',
@@ -15,8 +15,6 @@ const navbarList = [
 ];
 
 const Navbar = () => {
-  const {data: session} = useSession ();
-  console.log (session);
   const [anchorEl, setAnchorEl] = useState (null);
   const open = Boolean (anchorEl);
   const handleClick = event => {
@@ -35,7 +33,7 @@ const Navbar = () => {
           <ul className="flex flex-row items-center">
             {navbarList.map (item => {
               return (
-                <Link href="#">
+                <Link href="#" key={item}>
                   <a>
                     <li className="mx-8 text-white font-Inter text-lg cursor-pointer hover:text-[#F9DBB3]">
                       {item}
@@ -46,19 +44,15 @@ const Navbar = () => {
             })}
           </ul>
         </div>
-        {session
-          ? <Avatar
-              alt={session.user.name}
-              src={session.user.image}
-              onClick={handleClick}
-              className="cursor-pointer"
-            />
-          : <button
-              onClick={signIn}
+        <Link href="/login">
+          <a>
+            <button
               className={`bg-[#0F0F0F] border-2 border-[#F9DBB3] px-4 py-2 text-white rounded-full hover:border-[#c58d43] hidden md:block `}
             >
               Sign In
-            </button>}
+            </button>
+          </a>
+        </Link>
 
         <div className="block md:hidden">
           <DrawerSection />

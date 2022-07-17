@@ -30,7 +30,7 @@ const DrawerSection = () => {
             <ul className="flex flex-col items-left w-[60vw] m-auto font-semibold h-[50vh] text-[20px]">
               {navmenu.map (name => {
                 return (
-                  <li className=" my-4 w-full text-center">
+                  <li className=" my-4 w-full text-center" key={name}>
                     {name}
                   </li>
                 );

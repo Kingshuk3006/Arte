@@ -18,7 +18,7 @@ const Footer = () => {
           <ul className="flex md:flex-row md:space-x-24 md:space-y-0 flex-col space-y-4 text-center">
             {footerItem.map (elm => {
               return (
-                <li>
+                <li key={elm}>
                   <Link href={elm.link}>
                     <a>
                       {elm.item}
