@@ -5,7 +5,7 @@ let articleText =
 
 const ArticleCard = () => {
   return (
-    <div className="flex flex-col bg-gradient-to-br from-[#0F0F0F] via-[#2e2b23] to-[#0F0F0F]  border border-[#A79376] p-2 rounded-md space-y-4 hover:scale-105 duration-300">
+    <div className="flex flex-col bg-gradient-to-br from-[#0F0F0F] via-[#2e2b23] to-[#0F0F0F]  hover:border hover:border-[#A79376] p-2 rounded-md space-y-4 hover:scale-105 duration-300">
       <img src="/images/imageCarousel.jpg" alt="Article image" className="" />
       <div className="text-white space-y-4 px-2">
         <h1 className="font-Playfair text-2xl font-semibold">
@@ -13,9 +13,11 @@ const ArticleCard = () => {
         </h1>
         <h1>{articleText.slice(0, 100).concat ('...')}</h1>
       </div>
-      <button className="border-2 border-[#A79376] font-semibold text-white px-4 py-2 rounded-md hover:bg-[#A79376] hover:text-black transition-all duration-300">
+      <div className='text-center'>
+      <button className="border border-[#A79376] font-semibold text-white px-4 py-2 rounded-md hover:bg-[#A79376] hover:text-black transition-all duration-300 w-44">
         Continue Reading
       </button>
+      </div>
     </div>
   );
 };

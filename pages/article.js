@@ -130,7 +130,7 @@ const article = () => {
               onChange={e => setHeading (e.target.value)}
             />
             <textarea
-              rows="4"
+              rows="6"
               Placeholder="Your Article.."
               className="focus:outline-none"
               onChange={e => setDescription (e.target.value)}

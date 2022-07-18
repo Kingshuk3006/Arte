@@ -12,7 +12,7 @@ const footerItem = [
 const Footer = () => {
   return (
     <footer className='w-full '>
-      <div className="flex flex-col items-center justify-center text-white space-y-8 my-8">
+      <div className="flex flex-col items-center justify-center text-white space-y-8 py-8">
         <img src="/images/logo.svg" />
         <div>
           <ul className="flex md:flex-row md:space-x-24 md:space-y-0 flex-col space-y-4 text-center">

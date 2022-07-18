@@ -29,6 +29,11 @@
       "static/chunks/webpack.js",
       "static/chunks/main.js",
       "static/chunks/pages/article.js"
+    ],
+    "/nearyou": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/nearyou.js"
     ]
   },
   "ampFirstPages": []
