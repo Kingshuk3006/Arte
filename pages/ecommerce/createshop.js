@@ -43,7 +43,7 @@ const Createshop = () => {
           </div>
           <img src="/images/createshop.png" />
         </section>
-        <div className={`my-12 ${!getStarted && 'hidden'}`} ref={ref}>
+        <div className={`py-12 ${!getStarted && 'hidden'}`} ref={ref}>
           <h1 className="xl:text-5xl lg:text-4xl text-3xl font-Playfair text-[#F9DBB3] text-center">
             Register Your Shop
           </h1>
