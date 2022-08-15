@@ -4,6 +4,11 @@ module.exports = {
     './components/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
+    // colors: {
+    //   // 'brown': '#F9DBB3',
+    //   // white: '#FFFFFF',
+    //   // black: '#0E0404',
+    // },
     extend: {
       backgroundImage: {
         herobg: "url('/images/herobg.jpg')",
@@ -20,10 +25,10 @@ module.exports = {
       },
     },
   },
- plugins: [
-    function ({ addVariant }) {
-        addVariant('child', '& > *');
-        addVariant('child-hover', '& > *:hover');
-    }
-],
+  plugins: [
+    function({addVariant}) {
+      addVariant ('child', '& > *');
+      addVariant ('child-hover', '& > *:hover');
+    },
+  ],
 };

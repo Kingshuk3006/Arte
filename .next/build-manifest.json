@@ -25,15 +25,15 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/article": [
+    "/ecommerce/createshop": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/article.js"
+      "static/chunks/pages/ecommerce/createshop.js"
     ],
-    "/nearyou": [
+    "/ecommerce/products": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/nearyou.js"
+      "static/chunks/pages/ecommerce/products.js"
     ]
   },
   "ampFirstPages": []

@@ -138,6 +138,7 @@ const article = () => {
             <input
               type="file"
               name="file"
+              multiple
               className="focus:outline-none block file:border-0 file:text-black file:rounded-md file:bg-[#A79376]"
               onChange={e => setImageSrc (e.target.value)}
             />
