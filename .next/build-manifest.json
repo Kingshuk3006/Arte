@@ -29,11 +29,6 @@
       "static/chunks/webpack.js",
       "static/chunks/main.js",
       "static/chunks/pages/ecommerce/createshop.js"
-    ],
-    "/ecommerce/products": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/ecommerce/products.js"
     ]
   },
   "ampFirstPages": []
