@@ -25,10 +25,10 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/ecommerce/createshop": [
+    "/ecommerce/addProductforSell": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/ecommerce/createshop.js"
+      "static/chunks/pages/ecommerce/addProductforSell.js"
     ]
   },
   "ampFirstPages": []

@@ -22,6 +22,7 @@ module.exports = {
       fontFamily: {
         Inter: ['Inter', 'sans-serif'],
         Playfair: ['Playfair Display', 'serif'],
+        Roboto_flex : ['Roboto Flex', 'sans-serif']
       },
     },
   },
