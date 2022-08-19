@@ -8,6 +8,8 @@ import Box from '@mui/material/Box';
 import TabList from '@mui/lab/TabList';
 import {AiOutlineClose} from 'react-icons/ai';
 import Footer from '../../components/Home/Footer';
+import {BsImageFill} from 'react-icons/bs';
+import {CgCloseO} from 'react-icons/cg';
 
 const AddProductforSell = () => {
   const [value, setValue] = React.useState ('1');
@@ -19,7 +21,8 @@ const AddProductforSell = () => {
   const [mrp, setMRP] = React.useState (0);
   const [discount, setDiscount] = React.useState (0);
   const [sellingPrice, setSellingPrice] = React.useState (0);
-
+  const [allFile, setAllFile] = React.useState ([{imageSrc: ''}]);
+  const [selectedFile, setSelectedFile] = useState ('');
 
   const addArtTag = () => {
     const tags = [...artTags];
@@ -45,12 +48,12 @@ const AddProductforSell = () => {
   };
 
   const addDiscount = (dis, Mrp) => {
-    console.log (dis);
+    // console.log (dis);
     if (dis >= 100) {
       alert ('Enter Discount Less than 100');
       setDiscount (0);
     } else {
-      console.log (mrp);
+      // console.log (mrp);
       const price = Mrp - Mrp * (dis * 0.01);
       setSellingPrice (price);
     }
@@ -79,7 +82,7 @@ const AddProductforSell = () => {
   };
 
   const ValidateOfferForm = () => {
-    console.log ('function called');
+    // console.log ('function called');
     if (mrp === 0 || discount < 0) {
       return false;
     } else {
@@ -87,7 +90,31 @@ const AddProductforSell = () => {
     }
   };
 
-  // console.log (ValidateOfferForm ());
+  const addImagetoPost = e => {
+    const reader = new FileReader ();
+    if (e.target.files[0]) {
+      reader.readAsDataURL (e.target.files[0]);
+    }
+
+    reader.onload = readerEvent => {
+      setSelectedFile (readerEvent.target.result);
+      console.log (selectedFile);
+      const images = [...allFile];
+      images[images.length - 1].imageSrc = selectedFile;
+      setAllFile (images);
+    };
+  };
+
+  const handleAddMoreImage = () => {
+    console.log ('function hit');
+    const images = [...allFile];
+    images.push ({imageSrc: ''});
+    setAllFile (images);
+    console.log (allFile);
+  };
+
+  console.log (allFile);
+
   return (
     <div className="bg-[#0F0F0F]">
       <Navbar />
@@ -160,7 +187,10 @@ const AddProductforSell = () => {
                       />
                       <div className="flex flex-wrap">
                         {artTags.map ((tag, index) => (
-                          <span className="bg-[#F9DBB3] font-medium w-fit px-3 py-2 rounded-full flex items-center ml-4 mt-4" key={index}>
+                          <span
+                            className="bg-[#F9DBB3] font-medium w-fit px-3 py-2 rounded-full flex items-center ml-4 mt-4"
+                            key={index}
+                          >
                             {tag}
                             <AiOutlineClose
                               className="ml-2 cursor-pointer"
@@ -266,7 +296,7 @@ const AddProductforSell = () => {
                     >
                       Prev
                     </button>
-                    {!ValidateOfferForm()
+                    {!ValidateOfferForm ()
                       ? <button
                           className="bg-[#f9dbb362] md:text-xl text-lg rounded-md px-4 py-2 mx-auto font-semibold cursor-not-allowed"
                           disabled
@@ -275,7 +305,7 @@ const AddProductforSell = () => {
                         </button>
                       : <button
                           className="bg-[#F9DBB3] md:text-xl text-lg rounded-md px-4 py-2 mx-auto font-semibold"
-                          onClick={()=> setValue ('3')}
+                          onClick={() => setValue ('3')}
                         >
                           Next
                         </button>}
@@ -285,7 +315,36 @@ const AddProductforSell = () => {
               </div>
             </TabPanel>
             <TabPanel value="3">
-              <h1 className="text-white">hello 3</h1>
+              <div className="bg-[#1b1b1b88] xl:px-16 lg:px-12 md:px-8 px-4 md:py-12 py-4 flex flex-col rounded-xl ">
+                {/* <h1 className="text-white ">{allFile[0].imageSrc} sgsgs</h1> */}
+                {allFile.map (({imageSrc}, index) => {
+                  return (
+                    <div key={index} className="my-4">
+                      {imageSrc !== ''
+                        ? <div className="relative">
+
+                            <img src={imageSrc} alt="null" className="" />
+                            <CgCloseO className="text-[#F9DBB3] text-3xl absolute top-4 right-4" />
+                            {/* onClick={() => setSelectedFile (null)} */}
+                          </div>
+                        : <input
+                            type="file"
+                            class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#f9dbb3be] hover:file:bg-[#F9DBB3]"
+                            onChange={e => addImagetoPost (e)}
+                          />}
+                    </div>
+                  );
+                })}
+                <div className="w-full py-4">
+                  <span className="font-medium cursor-pointer mx-auto bg-transparent border border-[#f9dbb3c9] px-3 py-2 rounded-full flex items-center text-white w-fit text-sm hover:bg-[#f9dbb32c]" onClick={() => handleAddMoreImage ()}>
+                    <BsImageFill
+                      className="text-[#F9DBB3] text-2xl mr-4 cursor-pointer"
+                    />
+                    Add More
+                  </span>
+                </div>
+
+              </div>
             </TabPanel>
           </TabContext>
         </div>
