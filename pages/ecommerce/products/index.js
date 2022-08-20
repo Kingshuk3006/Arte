@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
-import Footer from '../../components/Home/Footer';
-import Navbar from '../../components/Home/Hero/Navbar';
-import ProductCard from '../../components/ProductCard';
+import Footer from '../../../components/Home/Footer';
+import Navbar from '../../../components/Home/Hero/Navbar';
+import ProductCard from '../../../components/ProductCard';
 import {BiSearchAlt} from 'react-icons/bi';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
