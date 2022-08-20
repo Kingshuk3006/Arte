@@ -2,8 +2,10 @@ import Link from 'next/link';
 import React from 'react';
 import Footer from '../../components/Home/Footer';
 import Navbar from '../../components/Home/Hero/Navbar';
+import { useSession } from 'next-auth/react';
 
 const Ecommerce = () => {
+  const {data:session, status} = useSession()
   return (
     <div className="bg-[#0F0F0F]">
       <Navbar />
@@ -50,9 +52,12 @@ const Ecommerce = () => {
             <h1 className="text-[rgba(255, 255, 255, 0.5)] text-xl text-center md:text-left">
               Sell Your artwork to customers with Arte. Start your carrier as an Artist!
             </h1>
+            <Link href={session ? '/ecommerce/addProductforSell' : 'auth/signin'}>
             <button className="bg-[#F9DBB3] text-black px-6 py-3 font-semibold text-xl rounded-md">
               Sell
             </button>
+
+            </Link>
           </div>
           <img src="/images/sell.png" />
         </section>

@@ -17,12 +17,15 @@ const navbarList = [
 const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState (null);
   const open = Boolean (anchorEl);
+  const {data: session, status} = useSession ();
   const handleClick = event => {
     setAnchorEl (event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl (null);
   };
+
+  console.log(session)
   return (
     <div>
       <nav className="flex flex-row h-24 items-center justify-between xl:px-16 px-8 mx-auto max-w-[1280px]">
@@ -44,7 +47,7 @@ const Navbar = () => {
             })}
           </ul>
         </div>
-        <Link href="/login">
+        {session ? <img src={session.user.image || '/images/user.png'} className="w-12 h-12 rounded-full object-cover cursor-pointer" onClick={handleClick}/> : <Link href="/auth/signin">
           <a>
             <button
               className={`bg-[#0F0F0F] border-2 border-[#F9DBB3] px-4 py-2 text-white rounded-full hover:border-[#c58d43] hidden xl:block`}
@@ -52,8 +55,7 @@ const Navbar = () => {
               Sign In
             </button>
           </a>
-        </Link>
-
+        </Link>}
         <div className="block xl:hidden">
           <DrawerSection />
         </div>
@@ -67,7 +69,7 @@ const Navbar = () => {
           'aria-labelledby': 'basic-button',
         }}
       >
-        <div className="flex flex-col space-y-2 p-2 child:cursor-pointer">
+        <div className="flex flex-col space-y-2 p-2 child:cursor-pointer bg-[#000000ec] -my-2 text-[#F9DBB3]">
           <div onClick={handleClose}>Profile</div>
           <div onClick={handleClose}>My account</div>
           <div onClick={signOut}>Logout</div>

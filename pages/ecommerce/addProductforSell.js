@@ -10,6 +10,7 @@ import {AiOutlineClose} from 'react-icons/ai';
 import Footer from '../../components/Home/Footer';
 import {BsImageFill} from 'react-icons/bs';
 import {CgCloseO} from 'react-icons/cg';
+import { useSession } from 'next-auth/react';
 
 const AddProductforSell = () => {
   const [value, setValue] = React.useState ('1');
@@ -23,6 +24,7 @@ const AddProductforSell = () => {
   const [sellingPrice, setSellingPrice] = React.useState (0);
   const [allFile, setAllFile] = React.useState ([{imageSrc: ''}]);
   const [selectedFile, setSelectedFile] = useState ('');
+  const {data:session, status} = useSession()
 
   const addArtTag = () => {
     const tags = [...artTags];
@@ -133,7 +135,7 @@ const AddProductforSell = () => {
   return (
     <div className="bg-[#0F0F0F]">
       <Navbar />
-      <div className="max-w-[1280px] xl:mx-auto lg:mx-16 md:mx-8 mx-4">
+      {session && <div className="max-w-[1280px] xl:mx-auto lg:mx-16 md:mx-8 mx-4">
         <div className="md:py-16 py-8 md:w-4/5 mx-auto">
           <TabContext value={value}>
             <Box sx={{borderBottom: 1, borderColor: 'divider', color: 'white'}}>
@@ -403,7 +405,8 @@ const AddProductforSell = () => {
           </TabContext>
         </div>
 
-      </div>
+      </div>}
+      
       <Footer />
     </div>
   );
