@@ -13,6 +13,17 @@
     }
   }
 
+  @layer base{
+    @layer components{
+        .btn-brown{
+            @apply cursor-pointer bg-[#F9DBB3] text-black rounded-md font-Roboto_flex px-4 py-3 hover:bg-[#f8e1c3] transition-all font-semibold md:text-xl text-base active:scale-95
+        }
+    }
+    
+}
+
+
+
 .mapboxgl-ctrl-attrib-inner {
     color: '#0f0f0f';
 }

@@ -261,6 +261,8 @@ sketch
 # Workspace files are user-specific
 *.sublime-workspace
 
+.next
+
 # SFTP configuration file
 sftp-config.json
 sftp-config-alt*.json
