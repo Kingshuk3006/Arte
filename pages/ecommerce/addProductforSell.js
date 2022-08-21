@@ -15,6 +15,22 @@ import {userLoginContext} from '../../context/userLoginContext';
 import {useContext} from 'react';
 import Link from 'next/link';
 import AuthenticatedScreen from '../../components/AuthenticatedScreen';
+import {
+  addDoc,
+  arrayUnion,
+  collection,
+  doc,
+  serverTimestamp,
+  updateDoc,
+} from 'firebase/firestore';
+import {db, storage} from '../../firebase';
+import {
+  ref,
+  getDownloadURL,
+  uploadString,
+  uploadBytes,
+  uploadBytesResumable,
+} from 'firebase/storage';
 
 const AddProductforSell = () => {
   const [value, setValue] = React.useState ('1');
@@ -26,7 +42,8 @@ const AddProductforSell = () => {
   const [mrp, setMRP] = React.useState (0);
   const [discount, setDiscount] = React.useState (0);
   const [sellingPrice, setSellingPrice] = React.useState (0);
-  const [allFile, setAllFile] = React.useState ([{imageSrc: ''}]);
+  const [allFile, setAllFile] = React.useState (['']);
+  const [images, setImages] = React.useState ([]);
   const [selectedFile, setSelectedFile] = useState ('');
   const {data: session, status} = useSession ();
 
@@ -41,7 +58,7 @@ const AddProductforSell = () => {
     setSingleArtTag ('');
   };
 
-  console.log(status)
+  // console.log(status)
   // console.log(mrp)
 
   const removeArtTag = index => {
@@ -99,6 +116,9 @@ const AddProductforSell = () => {
 
   const addImagetoPost = e => {
     const reader = new FileReader ();
+    const imageArr = [...images];
+    imageArr.push (e.target.files[0]);
+    setImages (imageArr);
     if (e.target.files[0]) {
       reader.readAsDataURL (e.target.files[0]);
     }
@@ -107,7 +127,7 @@ const AddProductforSell = () => {
       setSelectedFile (readerEvent.target.result);
 
       let images = [...allFile];
-      images[images.length - 1].imageSrc = readerEvent.target.result;
+      images[images.length - 1] = readerEvent.target.result;
       // console.log (images);
       setAllFile (images);
       // console.log (allFile, 'file');
@@ -116,7 +136,7 @@ const AddProductforSell = () => {
 
   const handleAddMoreImage = () => {
     let images = [...allFile];
-    images.push ({imageSrc: ''});
+    images.push ('');
     setAllFile (images);
     // console.log (allFile);
   };
@@ -128,14 +148,75 @@ const AddProductforSell = () => {
   };
 
   const ValidateImageForm = () => {
-    if (!allFile.every (item => item.imageSrc) || allFile.length === 0) {
+    if (!allFile.every (item => item) || allFile.length === 0) {
       return false;
     } else {
       return true;
     }
   };
 
+  console.log (images);
+
   // console.log (allFile);
+
+  const addProduct = async () => {
+    const docRef = await addDoc (collection (db, 'products'), {
+      title: title,
+      description: description,
+      shopID: shopID,
+      tags: artTags,
+      MRP: mrp,
+      discount: discount,
+      sellingPrice: sellingPrice,
+      timestamp: serverTimestamp (),
+    });
+    await Promise.all (
+      images.map (image => {
+        const imageRef = ref (storage, `products/${docRef}/images`);
+        console.log (imageRef);
+        const uploadTask = image && uploadBytesResumable (imageRef, image);
+        uploadTask &&
+          uploadTask.on (
+            'state_changed',
+            snapshot => {
+              const progress =
+                snapshot.bytesTransferred / snapshot.totalBytes * 100;
+              console.log ('Upload is ' + progress + '% done');
+              switch (snapshot.state) {
+                case 'paused':
+                  console.log ('Upload is paused');
+                  break;
+                case 'running':
+                  console.log ('Upload is running');
+                  break;
+              }
+            },
+            error => {
+              switch (error.code) {
+                case 'storage/unauthorized':
+                  break;
+                case 'storage/canceled':
+                  break;
+
+                case 'storage/unknown':
+                  break;
+              }
+            },
+            () => {
+              getDownloadURL (
+                uploadTask.snapshot.ref
+              ).then (downloadURLOnUpload => {
+                console.log ('File uploaded');
+                console.log (downloadURLOnUpload);
+                updateDoc (doc (db, 'products', docRef.id), {
+                  images: arrayUnion (downloadURLOnUpload),
+                });
+              });
+            }
+          );
+      })
+    );
+  };
 
   return (
     <div className="bg-[#0F0F0F]">
@@ -347,7 +428,7 @@ const AddProductforSell = () => {
                         *add maximum 5 images
                       </h1>
                       {/* <h1 className="text-white ">{allFile[0].imageSrc} sgsgs</h1> */}
-                      {allFile.map (({imageSrc}, index) => {
+                      {allFile.map ((imageSrc, index) => {
                         return (
                           <div key={index} className="my-4">
                             {imageSrc !== ''
@@ -404,7 +485,10 @@ const AddProductforSell = () => {
                             >
                               Add Product
                             </button>
-                          : <button className="bg-[#F9DBB3] md:text-xl text-lg rounded-md px-4 py-2 mx-auto font-semibold">
+                          : <button
+                              className="bg-[#F9DBB3] md:text-xl text-lg rounded-md px-4 py-2 mx-auto font-semibold"
+                              onClick={addProduct}
+                            >
                               Add Product
                             </button>}
 
