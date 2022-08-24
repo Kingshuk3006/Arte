@@ -7,7 +7,6 @@ import {BsVectorPen} from 'react-icons/bs';
 import {useRouter} from 'next/router';
 import {db} from '../../../firebase';
 import {collection, doc, get, getDoc, query} from 'firebase/firestore';
-import {async} from '@firebase/util';
 
 const IndividuaProduct = () => {
   const [productDetails, setProductDetails] = React.useState (null);

@@ -1,21 +1,21 @@
 import React from 'react';
-import Footer from '../../components/Home/Footer';
-import Navbar from '../../components/Home/Hero/Navbar';
-import TextField from '@mui/material/TextField';
-import {useState} from 'react';
-import {useRef} from 'react';
-import cities from '../../database/city';
+import Footer from '../../../components/Home/Footer';
+import Navbar from '../../../components/Home/Hero/Navbar';
 import {useSession} from 'next-auth/react';
-import {RiPrinterCloudLine} from 'react-icons/ri';
-import {addDoc, collection} from 'firebase/firestore';
-import {db} from '../../firebase';
-import AuthenticatedScreen from '../../components/AuthenticatedScreen';
+import {CgClose} from 'react-icons/cg';
+import Link from 'next/link';
+import Modal from '@mui/material/Modal';
+import { useState } from 'react';
+import cities from '../../../database/city';
+import { addDoc, collection, doc, getDoc } from 'firebase/firestore';
+import { db } from '../../../firebase';
+import {useRouter} from 'next/router';
 
-const Createshop = () => {
-  const ref = useRef (null);
-  const [getStarted, setGetStarted] = useState (false);
-  const {data: session, status} = useSession ();
-  const [shopName, setShopName] = useState ('');
+
+const AdminProfile = () => {
+  const {data: session} = useSession ();
+  const [userData, setUserData] = useState(null)
+  const [open, setOpen] = React.useState (false);
   const [address, setAddress] = useState ('');
   const [country, setCountry] = useState ('');
   const [state, setState] = useState ('');
@@ -24,15 +24,42 @@ const Createshop = () => {
   const [landmark, setLandmark] = useState ('');
   const [loading, setLoading] = useState (false);
 
-  const handleClick = () => {
-    ref.current.scrollIntoView ({behavior: 'smooth'});
-  };
+  const router = useRouter ();
+  const userID = router.query.uid;
+  console.log(userID)
 
+  const fetchUserDetails = React.useCallback (
+    async () => {
+      const eventRef = doc (db, 'users', userID);
+
+      const eventsnap = await getDoc (eventRef);
+      if (eventsnap.exists ()) {
+        const data = eventsnap.data ();
+        setUserData (data);
+      } else {
+        router.push (`/404`);
+      }
+    },
+    [userID, router]
+  );
+
+  React.useEffect (
+    () => {
+      if (!router.isReady) return;
+      fetchUserDetails ();
+    },
+    [fetchUserDetails, router.isReady]
+  );
+
+  console.log (userData, "userdta");
+
+
+  const handleOpen = () => setOpen (true);
+  const handleClose = () => {setOpen (false); RemoveFormData()}
   const stateCity = cities.filter (element => element.state == state);
 
   const validateRegister = () => {
     if (
-      shopName === '' ||
       address === '' ||
       country === '' ||
       state === '' ||
@@ -47,27 +74,26 @@ const Createshop = () => {
     }
   };
 
-  const RegisterShop = async () => {
-    setLoading (true);
-    await addDoc (collection (db, 'shops'), {
-      owner: session.user.name,
-      emailId: session.user.email,
-      shopName: shopName,
-      address: address,
-      country: country,
-      state: state,
-      city: city,
-      pincode: pincode,
-      landmark: landmark,
-      userid: session.user.uid
-    });
-    RemoveFormData ();
-    setLoading (false);
-    alert ('Shop Registered');
-  };
+  const addPersonalInfo = async ()=>{
+    setLoading(true)
+    await addDoc(collection(db, 'users'), {
+        name: session?.user?.name,
+        image: session?.user.image,
+        emailId: session?.user?.email,
+        userID: session?.user?.uid,
+        address: address,
+        country: country,
+        state: state,
+        city: city,
+        pincode: pincode,
+        landmark: landmark
+    })
+    setLoading(false)
+    alert("Info Added SuccessFully");
+    handleClose()
+  }
 
   const RemoveFormData = () => {
-    setShopName ('');
     setAddress ('');
     setCity ('');
     setState ('');
@@ -76,57 +102,46 @@ const Createshop = () => {
     setLandmark ('');
   };
 
-  console.log (session);
-
   return (
     <div className="bg-[#0F0F0F]">
       <Navbar />
-      {!session
-        ? <AuthenticatedScreen />
-        : <div className="max-w-[1280px] xl:mx-auto lg:mx-16 md:mx-8 mx-4">
-            <section className="grid lg:grid-cols-2 grid-cols-1 justify-items-center items-center lg:gap-8 min-h-[80vh]">
-              <div className="lg:space-y-8 space-y-4 flex flex-col justify-center items-center lg:items-start">
-                <h1 className="lg:text-5xl text-3xl  font-Playfair text-[#F9DBB3] flex ;g:justify-start justify-center items-center text-center">
-                  Build Your Shop !
-                  {' '}
-                  <img src="/images/shop.svg" className="ml-4 w-8 lg:w-12" />
-                </h1>
-                <h1 className="xl:text-2xl text-xl text-[#FFFFFF] w-full text-center lg:text-left">
-                  Register your Shop in Arte to get Started.
-                  Fill up the details!
-                </h1>
-                <button
-                  className="px-4 lg:py-3 py-2 bg-[#F9DBB3] rounded-md text-black md:text-xl text-lg  font-semibold"
-                  onClick={() => {
-                    setGetStarted (true);
-                    setTimeout (
-                      () => {
-                        handleClick ();
-                      },
-                      [200]
-                    );
-                  }}
-                >
-                  Get Started
-                </button>
-              </div>
-              <img src="/images/createshop.png" />
-            </section>
-            <div className={`py-12 ${!getStarted && 'hidden'}`} ref={ref}>
-              <h1 className="xl:text-5xl lg:text-4xl text-3xl font-Playfair text-[#F9DBB3] text-center">
-                Register Your Shop
-              </h1>
-              <form className="flex flex-col space-y-12 py-16">
-                <div className="w-full flex flex-col  space-y-4">
-                  <label className="text-xl text-[#F9DBB3]">Shop Name</label>
-                  <input
-                    value={shopName}
-                    onChange={e => setShopName (e.target.value)}
-                    type="text"
-                    placeholder="Your Shop Name"
-                    className="bg-[#1b1b1b88] border border-[#f9dbb341] focus:outline-none px-4 py-3 placeholder:text-[#ffffff49] text-white rounded-md"
-                  />
-                </div>
+      <div className="xl:px-16 px-8 mx-auto max-w-[1280px] text-white space-y-12">
+        <div className="flex flex-col justify-center items-center space-y-8 my-8">
+          <div>
+            <img src={session?.user?.image} className="w-[8rem] rounded-full" />
+          </div>
+          <div>
+            <h1 className="text-[#F9DBB3] text-5xl font-Playfair">
+              {session?.user?.name}
+            </h1>
+          </div>
+        </div>
+        <div className="space-y-8">
+          <h1 className="text-[#F9DBB3] text-4xl font-Playfair">Person Info</h1>
+          <h1 className="text-xl flex items-center">
+            <CgClose className="text-red-500 text-3xl mr-4" /> No info given !
+          </h1>
+          <button className="btn-brown" onClick={handleOpen}>Add Info</button>
+        </div>
+        <div className="space-y-8">
+          <h1 className="text-[#F9DBB3] text-4xl font-Playfair">Shop</h1>
+          <h1 className="text-xl flex items-center">
+            <CgClose className="text-red-500 text-3xl mr-4" /> No Shop Created !
+          </h1>
+          <Link href="/ecommerce/createshop">
+            <button className="btn-brown">Create Shop</button>
+          </Link>
+        </div>
+      </div>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#2c2c2c] md:w-[50vw] w-[80vw] space-y-4 p-4 rounded-lg">
+          <h1 className='text-[#F9DBB3] font-Roboto_flex text-3xl font-medium text-center'>Add Info</h1>
+          <form className="flex flex-col space-y-4">
                 <div className="w-full flex flex-col  space-y-4">
                   <label className="text-xl text-[#F9DBB3]">Address</label>
                   <textarea
@@ -137,7 +152,7 @@ const Createshop = () => {
                     className="bg-[#1b1b1b88] border border-[#f9dbb341] focus:outline-none px-4 py-3 placeholder:text-[#ffffff49] text-white rounded-md"
                   />
                 </div>
-                <div className="grid lg:grid-cols-2 grid-cols-1  gap-12">
+                <div className="grid md:grid-cols-2 grid-cols-1  md:gap-12">
                   <div className="w-full flex flex-col  space-y-4">
                     <label className="text-xl text-[#F9DBB3]">Country</label>
                     <select
@@ -206,7 +221,7 @@ const Createshop = () => {
                     </select>
                   </div>
                 </div>
-                <div className="grid lg:grid-cols-2 grid-cols-1  gap-12">
+                <div className="grid lg:grid-cols-2 grid-cols-1  md:gap-12">
                   <div className="w-full flex flex-col  space-y-4">
                     <label className="text-xl text-[#F9DBB3]">City</label>
                     {state === ''
@@ -258,21 +273,20 @@ const Createshop = () => {
                       className="text-xl bg-[#f9dbb365] font-semibold rounded-md w-fit px-4 py-3 mx-auto cursor-not-allowed"
                       disabled
                     >
-                      Register
+                      Add
                     </button>
                   : <button
                       className="text-xl bg-[#F9DBB3] font-semibold rounded-md w-fit px-4 py-3 mx-auto cursor-pointer"
-                      onClick={RegisterShop}
+                      onClick={addPersonalInfo}
                     >
-                      Register
+                      Add
                     </button>}
               </form>
-            </div>
-          </div>}
-
+        </div>
+      </Modal>
       <Footer />
     </div>
   );
 };
 
-export default Createshop;
+export default AdminProfile;

@@ -71,7 +71,6 @@ const Navbar = () => {
       >
         <div className="flex flex-col space-y-2 p-2 child:cursor-pointer bg-[#000000ec] -my-2 text-[#F9DBB3]">
           <div onClick={handleClose}>Profile</div>
-          <div onClick={handleClose}>My account</div>
           <div onClick={signOut}>Logout</div>
         </div>
       </Menu>
