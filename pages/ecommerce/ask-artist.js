@@ -4,9 +4,97 @@ import Navbar from '../../components/Home/Hero/Navbar';
 import {useSession} from 'next-auth/react';
 import AuthenticatedScreen from '../../components/AuthenticatedScreen';
 import AskCard from '../../components/AskCard';
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  onSnapshot,
+  orderBy,
+  query,
+  setDoc,
+} from 'firebase/firestore';
+import {db} from '../../firebase';
+import {serverTimestamp} from 'firebase/firestore';
+import {AiFillSlackCircle} from 'react-icons/ai';
+import {allowedStatusCodes} from 'next/dist/lib/load-custom-routes';
 
 const AskArtist = () => {
   const {data: session, status} = useSession ();
+  const [description, setDescription] = React.useState ('');
+  const [loading, setLoading] = React.useState (false);
+  const [allAsking, setAllAsking] = React.useState ([]);
+
+  const publishArt = async () => {
+    setLoading (true);
+    const docRef = await addDoc (collection (db, 'ask-artist'), {
+      writer_name: session.user.name,
+      writer_image: session.user.image,
+      writer_email: session.user.email,
+      time: serverTimestamp (),
+      description: description,
+    });
+    setLoading (false);
+    setDescription ('');
+    alert ('Ask Added');
+  };
+
+  const validateDescription = () => {
+    if (description === '' || description.match (/(\w+)/g).length > 100) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  // const getAllAsks = async () => {
+  //   const data = [...allAsking];
+  //   await getDocs (collection (db, 'ask-artist')).then (snapshot => {
+  //     snapshot.docs.map (doc => {
+  //       data.push ({...doc.data (), id: doc.id});
+  //     });
+  //   });
+  //   setAllAsking (data);
+  // };
+
+  // React.useEffect (() => {
+  //   getAllAsks ();
+  // }, []);
+
+  // const getAskings = React.useCallback (async () => {
+  //   const data = [];
+  //   await getDocs (collection (db, 'ask-artist'))
+  //     .then (snapshot => {
+  //       snapshot.docs.map (doc => {
+  //         data.push ({...doc.data (), id: doc.id});
+  //       });
+  //       setAllAsking (data);
+  //     })
+  //     .catch (err => {
+  //       console.log (err);
+  //     });
+  // }, [db]);
+
+  // React.useEffect (
+  //   () => {
+  //     getAskings ();
+  //   },
+  //   [getAskings]
+  // );
+
+  React.useEffect (
+    () => {
+      return onSnapshot (
+        query (collection (db, 'ask-artist'), orderBy ('time', 'desc')),
+        snapshot => {
+          setAllAsking (snapshot.docs);
+        }
+      );
+    },
+    [db]
+  );
+
   return (
     <div className="bg-[#0F0F0F] font-Roboto_flex">
       <Navbar />
@@ -24,6 +112,8 @@ const AskArtist = () => {
                       className="px-4 py-3 focus:outline-none border border-[#f9dbb341] rounded-md w-full bg-[#1b1b1b88] text-white"
                       placeholder="Describe your dream artwork in less than 100 words"
                       rows={7}
+                      onChange={e => setDescription (e.target.value)}
+                      value={description}
                     />
                     <h1 className="text-right text-[#f9dbb3de] md:text-lg text-base">
                       - {session.user.name}
@@ -31,20 +121,49 @@ const AskArtist = () => {
                   </div>
                 </div>
                 <div className="text-center">
-                  <button className="btn-brown my-4">Publish</button>
+                  {!validateDescription ()
+                    ? <button
+                        className="btn-brown bg-[#f9dbb35d] my-4"
+                        disabled
+                      >
+                        Publish
+                      </button>
+                    : <button
+                        className="btn-brown my-4"
+                        onClick={e => {
+                          e.preventDefault ();
+                          publishArt ();
+                        }}
+                      >
+                        Publish
+                      </button>}
                 </div>
               </form>
-              <hr className='border-[0.5px] border-[#f9dbb344] mt-8'/>
-{/* 
-              <div className="flex flex-col space-y-4 justify-center items-center">
-                <img src="/images/empty.png" className='w-[30rem]'/>
-                <h1 className="text-[#F9DBB3] text-xl">No Askings for now !!</h1>
-              </div> */}
-              <div className='space-y-8 my-8'>
-              <AskCard/>
-              <AskCard/>
-              <AskCard/>
-              </div>
+              <hr className="border-[0.5px] border-[#f9dbb344] mt-8" />
+              {/* 
+               */}
+              {allAsking.length === 0
+                ? <div className="flex flex-col space-y-4 justify-center items-center">
+                    <img src="/images/empty.png" className="w-[30rem]" />
+                    <h1 className="text-[#F9DBB3] text-xl">
+                      No Askings for now !!
+                    </h1>
+                  </div>
+                : <div className="space-y-8 my-8">
+                    {allAsking.map ((ask, index) => {
+                      return (
+                        <AskCard
+                          description={ask.data ().description}
+                          time={ask.data ().time}
+                          email={ask.data ().writer_email}
+                          image={ask.data ().writer_image}
+                          name={ask.data ().writer_name}
+                          key={index}
+                        />
+                      );
+                    })}
+                  </div>}
+
             </div>
           : <AuthenticatedScreen />}
       </div>

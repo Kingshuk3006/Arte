@@ -25,7 +25,7 @@ const Navbar = () => {
     setAnchorEl (null);
   };
 
-  console.log(session)
+  // console.log(session)
   return (
     <div>
       <nav className="flex flex-row h-24 items-center justify-between xl:px-16 px-8 mx-auto max-w-[1280px]">
