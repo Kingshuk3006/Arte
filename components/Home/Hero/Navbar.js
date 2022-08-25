@@ -6,6 +6,7 @@ import {Avatar} from '@material-ui/core';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import {useState, useEffect} from 'react';
+import { useRouter } from 'next/router';
 const navbarList = [
   'Articles',
   'Near You',
@@ -24,6 +25,7 @@ const Navbar = () => {
   const handleClose = () => {
     setAnchorEl (null);
   };
+  const router = useRouter()
 
   // console.log(session)
   return (
@@ -70,7 +72,7 @@ const Navbar = () => {
         }}
       >
         <div className="flex flex-col space-y-2 p-2 child:cursor-pointer bg-[#000000ec] -my-2 text-[#F9DBB3]">
-          <div onClick={handleClose}>Profile</div>
+          <div onClick={()=> router.push(`/profile/admin/${session?.user?.uid}`)}>Profile</div>
           <div onClick={signOut}>Logout</div>
         </div>
       </Menu>

@@ -7,14 +7,16 @@ import Link from 'next/link';
 import Modal from '@mui/material/Modal';
 import { useState } from 'react';
 import cities from '../../../database/city';
-import { addDoc, collection, doc, getDoc } from 'firebase/firestore';
+import { addDoc, doc, getDoc, setDoc , query, where, collection, onSnapshot, getDocs} from 'firebase/firestore';
 import { db } from '../../../firebase';
 import {useRouter} from 'next/router';
+import AuthenticatedScreen from '../../../components/AuthenticatedScreen';
 
 
 const AdminProfile = () => {
   const {data: session} = useSession ();
   const [userData, setUserData] = useState(null)
+  const [userShopData, setUserShopData] = useState(null)
   const [open, setOpen] = React.useState (false);
   const [address, setAddress] = useState ('');
   const [country, setCountry] = useState ('');
@@ -36,8 +38,8 @@ const AdminProfile = () => {
       if (eventsnap.exists ()) {
         const data = eventsnap.data ();
         setUserData (data);
-      } else {
-        router.push (`/404`);
+      }else{
+        setUserData(null)
       }
     },
     [userID, router]
@@ -47,11 +49,25 @@ const AdminProfile = () => {
     () => {
       if (!router.isReady) return;
       fetchUserDetails ();
+      checkForShop()
     },
     [fetchUserDetails, router.isReady]
   );
 
-  console.log (userData, "userdta");
+  // console.log (userData, "userdta");
+
+  const checkForShop = async ()=>{
+    const q =  query(collection(db, 'shops'), where("userid", "==", userID))
+
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+    // doc.data() is never undefined for query doc snapshots
+    // console.log(doc.id, " => ", doc.data());
+    setUserShopData({data: doc.data(), id:doc.id})
+    });
+  }
+
+  console.log(userShopData, "shopData")
 
 
   const handleOpen = () => setOpen (true);
@@ -76,7 +92,7 @@ const AdminProfile = () => {
 
   const addPersonalInfo = async ()=>{
     setLoading(true)
-    await addDoc(collection(db, 'users'), {
+    await setDoc(doc(db, 'users', userID), {
         name: session?.user?.name,
         image: session?.user.image,
         emailId: session?.user?.email,
@@ -105,34 +121,35 @@ const AdminProfile = () => {
   return (
     <div className="bg-[#0F0F0F]">
       <Navbar />
-      <div className="xl:px-16 px-8 mx-auto max-w-[1280px] text-white space-y-12">
+      {session ? <div className="xl:px-16 sm:px-8 px-4 mx-auto max-w-[1280px] text-white space-y-12">
         <div className="flex flex-col justify-center items-center space-y-8 my-8">
           <div>
-            <img src={session?.user?.image} className="w-[8rem] rounded-full" />
+            <img src={userData?.image} className="w-[8rem] rounded-full" />
           </div>
           <div>
-            <h1 className="text-[#F9DBB3] text-5xl font-Playfair">
-              {session?.user?.name}
+            <h1 className="text-[#F9DBB3] xl:text-5xl lg:text-4xl md:text-3xl text-2xl font-Playfair">
+              {userData?.name}
             </h1>
           </div>
         </div>
         <div className="space-y-8">
-          <h1 className="text-[#F9DBB3] text-4xl font-Playfair">Person Info</h1>
-          <h1 className="text-xl flex items-center">
+          <h1 className="text-[#F9DBB3] xl:text-4xl lg:text-3xl md:text-2xl text-xl font-Playfair">Person Info</h1>
+          {!userData ? <div><h1 className="text-xl flex items-center">
             <CgClose className="text-red-500 text-3xl mr-4" /> No info given !
           </h1>
-          <button className="btn-brown" onClick={handleOpen}>Add Info</button>
+          <button className="btn-brown" onClick={handleOpen}>Add Info</button></div> : <div className='flex flex-col justify-start space-y-8 py-4 md:px-8 px-2 rounded-xl bg-[#1b1b1b88]'><section className='grid md:grid-cols-5 grid-cols-4'><label className='text-[#F9DBB3] lg:text-2xl text-lg whitespace-nowrap'>Address :</label><h1 className='col-span-4 lg:text-xl text-sm'>{userData?.address}</h1></section><section className='grid md:grid-cols-5 grid-cols-4'><label className='text-[#F9DBB3] lg:text-2xl text-lg whitespace-nowrap'>Country :</label><h1 className='col-span-4 lg:text-xl text-sm'>{userData?.country}</h1></section><section className='grid md:grid-cols-5 grid-cols-4'><label className='text-[#F9DBB3] lg:text-2xl text-lg whitespace-nowrap'>State :</label><h1 className='col-span-4 lg:text-xl text-sm'>{userData?.state}</h1></section><section className='grid md:grid-cols-5 grid-cols-4'><label className='text-[#F9DBB3] lg:text-2xl text-lg whitespace-nowrap'>City :</label><h1 className='col-span-4 lg:text-xl text-sm'>{userData?.city}</h1></section><section className='grid md:grid-cols-5 grid-cols-4'><label className='text-[#F9DBB3] lg:text-2xl text-lg whitespace-nowrap'>Pincode :</label><h1 className='col-span-4 lg:text-xl text-sm'>{userData?.pincode}</h1></section><section className='grid md:grid-cols-5 grid-cols-4'><label className='text-[#F9DBB3] lg:text-2xl text-lg whitespace-nowrap'>Landmark :</label><h1 className='col-span-4 lg:text-xl text-sm'>{userData?.landmark}</h1></section></div>}
         </div>
         <div className="space-y-8">
           <h1 className="text-[#F9DBB3] text-4xl font-Playfair">Shop</h1>
-          <h1 className="text-xl flex items-center">
+          {!userShopData ? <div><h1 className="text-xl flex items-center">
             <CgClose className="text-red-500 text-3xl mr-4" /> No Shop Created !
           </h1>
           <Link href="/ecommerce/createshop">
             <button className="btn-brown">Create Shop</button>
-          </Link>
+          </Link></div> : <div className='flex flex-col justify-start space-y-8 py-4 md:px-8 px-2 rounded-xl bg-[#1b1b1b88]'><section className='grid md:grid-cols-5 grid-cols-4'><label className='text-[#F9DBB3] lg:text-2xl text-lg whitespace-nowrap'>ShopID :</label><h1 className='col-span-4 lg:text-xl text-sm'>{userShopData?.id}</h1></section><section className='grid md:grid-cols-5 grid-cols-4'><label className='text-[#F9DBB3] lg:text-2xl text-lg whitespace-nowrap'>Shopname :</label><h1 className='col-span-4 lg:text-xl text-sm'>{userShopData?.data?.shopName}</h1></section><section className='grid md:grid-cols-5 grid-cols-4'><label className='text-[#F9DBB3] lg:text-2xl text-lg whitespace-nowrap'>Country :</label><h1 className='col-span-4 lg:text-xl text-sm'>{userShopData?.data?.country}</h1></section><section className='grid md:grid-cols-5 grid-cols-4'><label className='text-[#F9DBB3] lg:text-2xl text-lg whitespace-nowrap'>State :</label><h1 className='col-span-4 lg:text-xl text-sm'>{userShopData?.data?.state}</h1></section><section className='grid md:grid-cols-5 grid-cols-4'><label className='text-[#F9DBB3] lg:text-2xl text-lg whitespace-nowrap'>City :</label><h1 className='col-span-4 lg:text-xl text-sm'>{userShopData?.data?.city}</h1></section><section className='grid md:grid-cols-5 grid-cols-4'><label className='text-[#F9DBB3] lg:text-2xl text-lg whitespace-nowrap'>Pincode :</label><h1 className='col-span-4 lg:text-xl text-sm'>{userShopData?.data?.pincode}</h1></section><section className='grid md:grid-cols-5 grid-cols-4'><label className='text-[#F9DBB3] lg:text-2xl text-lg whitespace-nowrap'>Landmark :</label><h1 className='col-span-4 lg:text-xl text-sm'>{userShopData?.data?.landmark}</h1></section></div>}
         </div>
-      </div>
+      </div>: <AuthenticatedScreen/>}
+      
       <Modal
         open={open}
         onClose={handleClose}
