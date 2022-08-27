@@ -7,7 +7,7 @@ import Link from 'next/link';
 import Modal from '@mui/material/Modal';
 import { useState } from 'react';
 import cities from '../../../database/city';
-import { addDoc, doc, getDoc, setDoc , query, where, collection, onSnapshot, getDocs} from 'firebase/firestore';
+import { addDoc, doc, getDoc, setDoc , query, where, collection, onSnapshot, getDocs, updateDoc} from 'firebase/firestore';
 import { db } from '../../../firebase';
 import {useRouter} from 'next/router';
 import AuthenticatedScreen from '../../../components/AuthenticatedScreen';
@@ -54,6 +54,14 @@ const AdminProfile = () => {
     [fetchUserDetails, router.isReady]
   );
 
+  const checkUserData = ()=>{
+    if( !userData?.address || !userData?.country || !userData?.state || !userData?.city || !userData?.pincode || !userData?.landmark){
+      return false
+    }else{
+      return true
+    }
+  }
+
   // console.log (userData, "userdta");
 
   const checkForShop = async ()=>{
@@ -92,11 +100,7 @@ const AdminProfile = () => {
 
   const addPersonalInfo = async ()=>{
     setLoading(true)
-    await setDoc(doc(db, 'users', userID), {
-        name: session?.user?.name,
-        image: session?.user.image,
-        emailId: session?.user?.email,
-        userID: session?.user?.uid,
+    await updateDoc(doc(db, 'users', userID), {
         address: address,
         country: country,
         state: state,
@@ -107,6 +111,7 @@ const AdminProfile = () => {
     setLoading(false)
     alert("Info Added SuccessFully");
     handleClose()
+    router.reload(window.location.pathname);
   }
 
   const RemoveFormData = () => {
@@ -134,14 +139,14 @@ const AdminProfile = () => {
         </div>
         <div className="space-y-8">
           <h1 className="text-[#F9DBB3] xl:text-4xl lg:text-3xl md:text-2xl text-xl font-Playfair">Person Info</h1>
-          {!userData ? <div><h1 className="text-xl flex items-center">
+          {!checkUserData() ? <div className='space-y-4'><h1 className="text-xl flex items-center">
             <CgClose className="text-red-500 text-3xl mr-4" /> No info given !
           </h1>
           <button className="btn-brown" onClick={handleOpen}>Add Info</button></div> : <div className='flex flex-col justify-start space-y-8 py-4 md:px-8 px-2 rounded-xl bg-[#1b1b1b88]'><section className='grid md:grid-cols-5 grid-cols-4'><label className='text-[#F9DBB3] lg:text-2xl text-lg whitespace-nowrap'>Address :</label><h1 className='col-span-4 lg:text-xl text-sm'>{userData?.address}</h1></section><section className='grid md:grid-cols-5 grid-cols-4'><label className='text-[#F9DBB3] lg:text-2xl text-lg whitespace-nowrap'>Country :</label><h1 className='col-span-4 lg:text-xl text-sm'>{userData?.country}</h1></section><section className='grid md:grid-cols-5 grid-cols-4'><label className='text-[#F9DBB3] lg:text-2xl text-lg whitespace-nowrap'>State :</label><h1 className='col-span-4 lg:text-xl text-sm'>{userData?.state}</h1></section><section className='grid md:grid-cols-5 grid-cols-4'><label className='text-[#F9DBB3] lg:text-2xl text-lg whitespace-nowrap'>City :</label><h1 className='col-span-4 lg:text-xl text-sm'>{userData?.city}</h1></section><section className='grid md:grid-cols-5 grid-cols-4'><label className='text-[#F9DBB3] lg:text-2xl text-lg whitespace-nowrap'>Pincode :</label><h1 className='col-span-4 lg:text-xl text-sm'>{userData?.pincode}</h1></section><section className='grid md:grid-cols-5 grid-cols-4'><label className='text-[#F9DBB3] lg:text-2xl text-lg whitespace-nowrap'>Landmark :</label><h1 className='col-span-4 lg:text-xl text-sm'>{userData?.landmark}</h1></section></div>}
         </div>
         <div className="space-y-8">
           <h1 className="text-[#F9DBB3] text-4xl font-Playfair">Shop</h1>
-          {!userShopData ? <div><h1 className="text-xl flex items-center">
+          {!userShopData ? <div className='space-y-4'><h1 className="text-xl flex items-center">
             <CgClose className="text-red-500 text-3xl mr-4" /> No Shop Created !
           </h1>
           <Link href="/ecommerce/createshop">

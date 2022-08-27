@@ -4,8 +4,6 @@ import {RiShoppingBasketLine} from 'react-icons/ri';
 
 const ProductCard = ({
   title,
-  description,
-  tags,
   shopName,
   mrp,
   sellingPrice,
@@ -14,7 +12,7 @@ const ProductCard = ({
   productId,
 }) => {
   return (
-    <div className="bg-[#1b1b1b88] max-w-[30rem] rounded-md overflow-hidden">
+    <div className="bg-[#1b1b1b88] w-[25rem] rounded-md overflow-hidden">
       <img
         src={image}
         className="object-contain mx-auto hover:scale-110 duration-200 max-h-[20rem]"

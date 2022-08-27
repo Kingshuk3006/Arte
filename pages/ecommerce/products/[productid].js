@@ -1,42 +1,78 @@
-import React, {useEffect} from 'react';
-import EcommerceSwiper from '../../../components/EcommerceSwiper';
-import Footer from '../../../components/Home/Footer';
-import Navbar from '../../../components/Home/Hero/Navbar';
-import {AiFillTags} from 'react-icons/ai';
-import {BsVectorPen} from 'react-icons/bs';
-import {useRouter} from 'next/router';
-import {db} from '../../../firebase';
-import {collection, doc, get, getDoc, query} from 'firebase/firestore';
+import React, { useEffect } from "react";
+import EcommerceSwiper from "../../../components/EcommerceSwiper";
+import Footer from "../../../components/Home/Footer";
+import Navbar from "../../../components/Home/Hero/Navbar";
+import { AiFillTags } from "react-icons/ai";
+import { BsVectorPen } from "react-icons/bs";
+import { useRouter } from "next/router";
+import { db } from "../../../firebase";
+import {
+  arrayUnion,
+  collection,
+  doc,
+  FieldValue,
+  get,
+  getDoc,
+  query,
+  updateDoc,
+} from "firebase/firestore";
+import { useSession } from "next-auth/react";
+import { async } from "@firebase/util";
 
 const IndividuaProduct = () => {
-  const [productDetails, setProductDetails] = React.useState (null);
-  const router = useRouter ();
+  const [productDetails, setProductDetails] = React.useState(null);
+  const router = useRouter();
   const productID = router.query.productid;
+  const { data: session } = useSession();
+  const [userCartData, setUserCartData] = React.useState([]);
 
-  const fetchProductDetails = React.useCallback (
-    async () => {
-      const eventRef = doc (db, 'products', productID);
+  const fetchProductDetails = React.useCallback(async () => {
+    const eventRef = doc(db, "products", productID);
 
-      const eventsnap = await getDoc (eventRef);
-      if (eventsnap.exists ()) {
-        const data = eventsnap.data ();
-        setProductDetails (data);
-      } else {
-        router.push (`/404`);
-      }
-    },
-    [productID, router]
-  );
+    const eventsnap = await getDoc(eventRef);
+    if (eventsnap.exists()) {
+      const data = eventsnap.data();
+      setProductDetails(data);
+    } else {
+      router.push(`/404`);
+    }
+  }, [productID, router]);
 
-  React.useEffect (
-    () => {
-      if (!router.isReady) return;
-      fetchProductDetails ();
-    },
-    [fetchProductDetails, router.isReady]
-  );
+  React.useEffect(() => {
+    if (!router.isReady) return;
+    fetchProductDetails();
+  }, [fetchProductDetails, router.isReady]);
 
-  console.log (productDetails);
+  // console.log (productDetails);
+
+  // const getUserData = async () => {
+  //   const userRef = doc(db, "users", session?.user?.uid);
+
+  //   const userSnap = await getDoc(userRef);
+  //   if (userSnap.exists()) {
+  //     const data = userSnap.data();
+  //     console.log(data);
+  //     setUserCartData(data.cart);
+  //   } else {
+  //     router.push("/auth/signin");
+  //   }
+  // };
+
+  const handleAddtoCart = async () => {
+    // await getUserData();
+    // console.log(userCartData, "userCart Data");
+    // let cartItems = [...userCartData];
+    // cartItems.push(productDetails);
+    // console.log(cartItems, "new Cart");
+
+    const userRef = doc(db, "users", session?.user?.uid);
+    await updateDoc(userRef, {
+      cart: arrayUnion(productDetails),
+    });
+    alert("Product Added to Cart");
+  };
+
+  console.log(userCartData, "cartData");
 
   return (
     <div className="bg-[#0F0F0F]">
@@ -45,36 +81,35 @@ const IndividuaProduct = () => {
         <div className="grid lg:grid-cols-2 grid-cols-1 lg:gap-16 gap-8  justify-items-center">
           {/* <EcommerceSwiper /> */}
           <img
-            src={productDetails.images}
+            src={productDetails?.images}
             className="w-[22rem] md:w-[30rem] xl:w-[35rem] object-contain"
           />
           <section className="flex flex-col justify-between space-y-12">
             <div className="space-y-4">
               <h1 className="lg:text-5xl md:text-4xl text-3xl text-[#F9DBB3]">
-                {productDetails.title}
+                {productDetails?.title}
               </h1>
               <h1 className="text-[#f9dbb3d8] text-xl">
-                - {productDetails.shopName}
+                - {productDetails?.shopName}
               </h1>
               <div>
                 <div className="flex justify-start space-x-4 child:h-full">
                   <section className="text-white flex items-center justify-center">
                     <span>₹</span>
-                    <h1 className="text-4xl">{productDetails.sellingPrice}</h1>
+                    <h1 className="text-4xl">{productDetails?.sellingPrice}</h1>
                   </section>
                   <section className="text-[#f9dbb36e] flex">
                     <span>₹</span>
                     <h1 className="text-2xl line-through">
-                      {productDetails.MRP}
+                      {productDetails?.MRP}
                     </h1>
                   </section>
                   <h1 className="text-red-400 text-lg">
-                    {productDetails.discount}% off
+                    {productDetails?.discount}% off
                   </h1>
                 </div>
                 <h1 className="text-[#ffffff5e]">*Inclusive all taxes</h1>
               </div>
-
             </div>
             <div className="space-y-4">
               <h1 className="text-[#F9DBB3] text-xl flex items-center">
@@ -82,25 +117,28 @@ const IndividuaProduct = () => {
                 Related Tags :
               </h1>
               <div className="grid lg:grid-cols-3 grid-cols-2 place-items-start justify-items-start gap-4">
-                {productDetails.tags.map ((tag, index) => {
+                {productDetails?.tags.map((tag, index) => {
                   return (
-                    <button className="btn-brown bg-transparent hover:text-black duration-200 text-white border-[#f9dbb356] border font-light py-2 px-4 w-full text-lg" ley={index}>
+                    <button
+                      className="btn-brown bg-transparent hover:text-black duration-200 text-white border-[#f9dbb356] border font-light py-2 px-4 w-full text-lg"
+                      ley={index}
+                    >
                       {tag}
                     </button>
                   );
                 })}
-
               </div>
             </div>
 
             <div className="grid grid-cols-2 justify-items-center md:justify-items-start gap-8 md:gap-12 lg:gap-20">
-              <button className="btn-brown bg-transparent border-[#F9DBB3] border text-[#F9DBB3] w-full hover:text-black">
+              <button
+                className="btn-brown bg-transparent border-[#F9DBB3] border text-[#F9DBB3] w-full hover:text-black"
+                onClick={handleAddtoCart}
+              >
                 Add to Cart
               </button>
               <button className="btn-brown w-full">Buy</button>
-
             </div>
-
           </section>
         </div>
         <section className="xl:px-16 lg:px-12 md:px-8 px-4 mt-16 flex flex-col md:flex-row justify-start md:space-x-4 md:space-y-0 space-y-4">
@@ -109,7 +147,7 @@ const IndividuaProduct = () => {
             <BsVectorPen className="text-[#F9DBB3] text-3xl ml-2" />
           </h1>
           <p className=" text-lg text-[#ffffffce] col-span-3 first-line:text-2xl first-line:mb-2">
-          {productDetails.description}
+            {productDetails?.description}
           </p>
         </section>
       </div>
