@@ -98,14 +98,16 @@ const IndividualCart = () => {
                 />
               );
             })}
+            <hr className="bg-[#ffffff3b] my-8" />
+            <div className="flex justify-center child:text-2xl font-Roboto_flex text-white space-x-4">
+              <h1>Your Total Price for the Purchase is : </h1>
+              <h1 className="text-[#F9DBB3]">₹ {getTotalPrice()}</h1>
+            </div>
+            <div className="text-center pb-16">
+              <button className="btn-brown font-semibold w-32">Buy</button>
+            </div>
           </div>
         )}
-
-        <hr className="bg-[#ffffff3b] my-8" />
-        <div className="flex justify-center child:text-2xl font-Roboto_flex text-white space-x-4">
-          <h1>Your Total Price for the Purchase is : </h1>
-          <h1 className="text-[#F9DBB3]">₹ {getTotalPrice()}</h1>
-        </div>
       </div>
       <Footer />
     </div>

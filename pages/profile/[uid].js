@@ -59,7 +59,7 @@ const UserProfile = () => {
       <Navbar />
       <div className="xl:px-16 sm:px-8 px-4 mx-auto max-w-[1280px] text-white h-[70vh]">
         {!userData
-          ? <div className="h-screen flex flex-col justify-center items-center space-y-4">
+          ? <div className="flex flex-col justify-center items-center space-y-4">
               <img src="/images/notFound.png" />
               <span className="lg:text-5xl font-semibold font-Roboto_flex text-[#F9DBB3]">
                 User Not Found !!
