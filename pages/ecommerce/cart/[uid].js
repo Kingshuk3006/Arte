@@ -6,10 +6,12 @@ import { useRouter } from "next/router";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../../firebase";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 const IndividualCart = () => {
   const [removeID, setRemoveID] = useState(null);
-  let totalPrice = 0;
+  // let totalPrice = 0;
+  const [totalPrice, setTotalPrice] = useState(0);
   const { data: session } = useSession();
   const router = useRouter();
   const uid = router.query.uid;
@@ -30,13 +32,16 @@ const IndividualCart = () => {
   React.useEffect(() => {
     if (!router.isReady) return;
     fetchUserDetails();
+    setTotalPrice(getTotalPrice());
   }, [fetchUserDetails, router.isReady]);
 
   const getTotalPrice = () => {
+    let price = 0;
+
     userData?.cart?.forEach((element) => {
-      totalPrice += element.sellingPrice;
+      price += element.sellingPrice;
     });
-    return totalPrice;
+    return price;
   };
 
   const RemoveCartItem = async () => {
@@ -101,10 +106,17 @@ const IndividualCart = () => {
             <hr className="bg-[#ffffff3b] my-8" />
             <div className="flex justify-center child:text-2xl font-Roboto_flex text-white space-x-4">
               <h1>Your Total Price for the Purchase is : </h1>
-              <h1 className="text-[#F9DBB3]">₹ {getTotalPrice()}</h1>
+              <h1 className="text-[#F9DBB3]">₹ {totalPrice}</h1>
             </div>
-            <div className="text-center pb-16">
-              <button className="btn-brown font-semibold w-32">Buy</button>
+            <div className="text-center  pb-16">
+              <Link
+                href={{
+                  pathname: `/ecommerce/buy/${uid}`,
+                  query: {  totalPrice },
+                }}
+              >
+                <button className="btn-brown font-semibold w-32">Buy</button>
+              </Link>
             </div>
           </div>
         )}

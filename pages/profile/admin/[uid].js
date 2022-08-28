@@ -39,6 +39,7 @@ const AdminProfile = () => {
   const router = useRouter();
   const userID = router.query.uid;
   console.log(userID);
+  const sessionUID = session && session?.user?.uid;
 
   const fetchUserDetails = React.useCallback(async () => {
     const eventRef = doc(db, "users", userID);
@@ -74,10 +75,11 @@ const AdminProfile = () => {
   };
 
   React.useEffect(() => {
-    if (session?.user?.uid !== userID) {
+    if (!session) return;
+    if (sessionUID !== userID) {
       router.push(`/profile/${userID}`);
     }
-  }, [router.isReady]);
+  }, [router]);
 
   // console.log (userData, "userdta");
 
@@ -91,8 +93,6 @@ const AdminProfile = () => {
       setUserShopData({ data: doc.data(), id: doc.id });
     });
   };
-
-  console.log(userShopData, "shopData");
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
@@ -146,7 +146,7 @@ const AdminProfile = () => {
     <div className="bg-[#0F0F0F]">
       <Navbar />
       {session ? (
-        <div className="xl:px-16 sm:px-8 px-4 mx-auto max-w-[1280px] text-white space-y-12">
+        <div className="xl:px-16 sm:px-8 px-4 mx-auto max-w-[1280px] text-white space-y-12 min-h-[70vh]">
           <div className="flex flex-col justify-center items-center space-y-8 my-8">
             <div>
               <img src={userData?.image} className="w-[8rem] rounded-full" />

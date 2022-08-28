@@ -23,12 +23,14 @@
     "firebase": "^9.9.3",
     "next": "12.1.6",
     "next-auth": "^4.9.0",
+    "razorpay": "^2.8.3",
     "react": "18.1.0",
     "react-dom": "18.1.0",
     "react-google-maps": "^9.4.5",
     "react-icons": "^4.4.0",
     "react-map-gl": "^7.0.17",
     "react-swiper": "^0.1.5",
+    "shortid": "^2.2.16",
     "swiper": "^8.3.2"
   },
   "devDependencies": {
