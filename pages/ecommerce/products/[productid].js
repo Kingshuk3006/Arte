@@ -6,6 +6,7 @@ import { AiFillTags } from "react-icons/ai";
 import { BsVectorPen } from "react-icons/bs";
 import { useRouter } from "next/router";
 import { db } from "../../../firebase";
+import {GrBasket} from 'react-icons/gr'
 import {
   arrayUnion,
   collection,
@@ -18,12 +19,15 @@ import {
 } from "firebase/firestore";
 import { useSession } from "next-auth/react";
 import { async } from "@firebase/util";
+import Link from "next/link";
 
 const IndividuaProduct = () => {
   const [productDetails, setProductDetails] = React.useState(null);
   const router = useRouter();
   const productID = router.query.productid;
   const { data: session } = useSession();
+  const uid = session && session.user.uid;
+
   const [userCartData, setUserCartData] = React.useState([]);
 
   const fetchProductDetails = React.useCallback(async () => {
@@ -32,7 +36,7 @@ const IndividuaProduct = () => {
     const eventsnap = await getDoc(eventRef);
     if (eventsnap.exists()) {
       const data = eventsnap.data();
-      setProductDetails(data);
+      setProductDetails({...data, id:eventsnap.id});
     } else {
       router.push(`/404`);
     }
@@ -42,6 +46,7 @@ const IndividuaProduct = () => {
     if (!router.isReady) return;
     fetchProductDetails();
   }, [fetchProductDetails, router.isReady]);
+
 
   // console.log (productDetails);
 
@@ -72,10 +77,10 @@ const IndividuaProduct = () => {
     alert("Product Added to Cart");
   };
 
-  console.log(userCartData, "cartData");
+  // console.log(userCartData, "cartData");
 
   return (
-    <div className="bg-[#0F0F0F]">
+    <div className="bg-[#0F0F0F] relative">
       <Navbar />
       <div className="max-w-[1280px] xl:mx-auto lg:mx-16 md:mx-8 mx-4 text-white space-y-16 py-16 font-Roboto_flex">
         <div className="grid lg:grid-cols-2 grid-cols-1 lg:gap-16 gap-8  justify-items-center">
@@ -151,6 +156,13 @@ const IndividuaProduct = () => {
           </p>
         </section>
       </div>
+      <Link href={`/ecommerce/cart/${uid}`}>
+        <div className="fixed right-16 bottom-16">
+          <div className="btn-brown rounded-full p-4 w-fit">
+            <GrBasket className="text-white text-3xl" />
+          </div>
+        </div>
+      </Link>
       <Footer />
     </div>
   );
