@@ -154,7 +154,7 @@ web_modules/
 .next
 out
 
-next.config,js
+.next.config,js
 
 # Nuxt.js build / generate output
 .nuxt
