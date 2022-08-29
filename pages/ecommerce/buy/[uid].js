@@ -1,4 +1,4 @@
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import Footer from "../../../components/Home/Footer";
@@ -17,8 +17,9 @@ const BuyProduct = () => {
   const router = useRouter();
   const userID = router.query.uid;
   const [userData, setUserData] = useState(null);
+  const [isPaymentDone, setIsPaymentDone] = useState(false);
 
-  console.log(router.query, "query")
+  console.log(router.query, "query");
 
   const fetchUserDetails = React.useCallback(async () => {
     const eventRef = doc(db, "users", userID);
@@ -72,13 +73,15 @@ const BuyProduct = () => {
       currency: data.currency,
       amount: 100 * parseInt(router.query.totalPrice),
       order_id: data.id,
-      description: "Thankyou for your test donation",
+      description: "Thankyou for your Purchase",
       image: "https://manuarora.in/logo.png",
       handler: function (response) {
-        // Validate payment at server - using webhooks is a better idea.
-        alert(response.razorpay_payment_id);
-        alert(response.razorpay_order_id);
-        alert(response.razorpay_signature);
+        alert("Payment Successfull !!");
+        console.log(
+          response.razorpay_signature,
+          response.razorpay_order_id,
+          response.razorpay_payment_id
+        );
       },
       prefill: {
         name: "Kingshuk Sarkar",
@@ -89,7 +92,22 @@ const BuyProduct = () => {
 
     const paymentObject = new window.Razorpay(options);
     paymentObject.open();
+    setIsPaymentDone(true);
   };
+
+  const RemoveAllCart = async () => {
+    const userRef = doc(db, "users", userID);
+
+    await updateDoc(userRef, {
+      cart: [],
+    });
+  };
+
+  useEffect(() => {
+    if (isPaymentDone) {
+      RemoveAllCart();
+    }
+  }, [isPaymentDone]);
 
   useEffect(() => {
     if (userData) {
@@ -232,9 +250,12 @@ const BuyProduct = () => {
             Payment Info
           </h1>
           <div className="text-center mb-16">
-            <button className="btn-brown w-32" onClick={makePayment}>
+          {isPaymentDone ? <button className="btn-brown w-32 bg-[#f9dbb352] cursor-not-allowed hover:bg-[#f9dbb352]" disabled>
               Buy
-            </button>
+            </button> : <button className="btn-brown w-32" onClick={makePayment}>
+              Buy
+            </button>}
+            
           </div>
         </div>
       </div>

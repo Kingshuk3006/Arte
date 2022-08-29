@@ -12,11 +12,11 @@ const CartItemCard = ({
 }) => {
   // console.log(productID);
   return (
-    <div className="bg-[#1b1b1b88] rounded-xl md:px-8 px-4 md:py-4 py-3 text-white flex justify-start space-x-4 relative max-h-64">
+    <div className="bg-[#1b1b1b88] rounded-xl md:px-8 px-4 md:py-4 py-3 text-white flex flex-col md:flex-row md:justify-start justify-center md:items-start items-center space-x-4 md:space-y-0 space-y-4 relative">
       <img src={image} className="max-w-[15rem] object-contain" />
       <div className="">
         <section className="space-y-3 h-full">
-          <h1 className="text-[#F9DBB3] font-Roboto_flex text-2xl font-medium">
+          <h1 className="text-[#F9DBB3] font-Roboto_flex md:text-2xl text-xl font-medium">
             {title}
           </h1>
           <h1 className="text-[#f9dbb36b] font-Roboto_flex text-lg font-medium">

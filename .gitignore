@@ -154,6 +154,8 @@ web_modules/
 .next
 out
 
+next.config,js
+
 # Nuxt.js build / generate output
 .nuxt
 dist

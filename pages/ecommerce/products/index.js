@@ -24,6 +24,7 @@ const Products = () => {
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [artWorks, setAllArtworks] = useState([]);
+  const [searchInput, setSearchInput] = useState("");
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -62,7 +63,16 @@ const Products = () => {
     getAskings();
   }, [getAskings]);
 
-  console.log(artWorks);
+  const handleSearch = (e) => {
+    setSearchInput(e.target.value);
+    console.log(searchInput)
+    let allArtWorks = [...artWorks];
+    allArtWorks.filter((product) =>
+      product.title.toLowerCase().includes(searchInput.toLowerCase())
+    );
+
+    console.log(allArtWorks, "artwork");
+  };
 
   return (
     <div className="bg-[#0F0F0F] relative">
@@ -78,6 +88,8 @@ const Products = () => {
             <input
               className=" focus:outline-none border border-[#f9dbb396] rounded-full w-full bg-transparent pr-4 pl-14 py-3 my-8 placeholder:text-[#f9dbb37c] text-[#f9dbb3] placeholder:text-lg text-lg"
               placeholder="Search"
+              value={searchInput}
+              onChange={(e) => handleSearch(e)}
             />
             <BiSearchAlt className="text-[#f9dbb396] text-3xl absolute top-[45px] left-4" />
           </div>

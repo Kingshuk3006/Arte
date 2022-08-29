@@ -8,7 +8,8 @@ const nextConfig = {
     GOOGLE_CLIENT_ID: '672097393936-a5lncmtr5as71kf05o3pc80v9raqm1op.apps.googleusercontent.com',
     SENDGRID_API_KEY: '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',
     FROM_MAIL: 'kingsarkar3006@gmail.com',
-    RAZORPAY_KEY:'rzp_test_PVCU8pGqjaCzVe'
+    RAZORPAY_KEY:'rzp_test_9Gy0135MsIhni6',
+    RAZORPAY_SECRET:'sXMzh7ZtIbAmfMbj0lADsuq2'
   },
 };
 

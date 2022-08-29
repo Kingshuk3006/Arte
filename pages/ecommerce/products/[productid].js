@@ -82,7 +82,7 @@ const IndividuaProduct = () => {
   return (
     <div className="bg-[#0F0F0F] relative">
       <Navbar />
-      <div className="max-w-[1280px] xl:mx-auto lg:mx-16 md:mx-8 mx-4 text-white space-y-16 py-16 font-Roboto_flex">
+      <div className="max-w-[1280px] xl:mx-auto lg:mx-16 md:mx-8 mx-4 text-white space-y-16 py-16 font-Roboto_flex min-h-[70vh]">
         <div className="grid lg:grid-cols-2 grid-cols-1 lg:gap-16 gap-8  justify-items-center">
           {/* <EcommerceSwiper /> */}
           <img
