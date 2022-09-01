@@ -24,6 +24,7 @@ const Products = () => {
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [artWorks, setAllArtworks] = useState([]);
+  const [storeAllArtWorks, setStoreAllArtWorks] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -53,6 +54,7 @@ const Products = () => {
           data.push({ ...doc.data(), id: doc.id });
         });
         setAllArtworks(data);
+        setStoreAllArtWorks(data);
       })
       .catch((err) => {
         console.log(err);
@@ -63,15 +65,17 @@ const Products = () => {
     getAskings();
   }, [getAskings]);
 
-  const handleSearch = (e) => {
-    setSearchInput(e.target.value);
-    console.log(searchInput)
-    let allArtWorks = [...artWorks];
-    allArtWorks.filter((product) =>
-      product.title.toLowerCase().includes(searchInput.toLowerCase())
-    );
-
-    console.log(allArtWorks, "artwork");
+  const handleSearch = () => {
+    if (searchInput == "") {
+      setAllArtworks([...storeAllArtWorks]);
+    } else {
+      let allArtWorks = [...artWorks];
+      let filtered = allArtWorks.filter((product) =>
+        product.title.toLowerCase().includes(searchInput.toLowerCase())
+      );
+      console.log(filtered, "artwork filtered");
+      setAllArtworks(filtered);
+    }
   };
 
   return (
@@ -89,18 +93,19 @@ const Products = () => {
               className=" focus:outline-none border border-[#f9dbb396] rounded-full w-full bg-transparent pr-4 pl-14 py-3 my-8 placeholder:text-[#f9dbb37c] text-[#f9dbb3] placeholder:text-lg text-lg"
               placeholder="Search"
               value={searchInput}
-              onChange={(e) => handleSearch(e)}
+              onChange={(e) => setSearchInput(e.target.value)}
+              onKeyPress={(e) => e.key === "Enter" && handleSearch()}
             />
             <BiSearchAlt className="text-[#f9dbb396] text-3xl absolute top-[45px] left-4" />
           </div>
-          <div className="items-right flex justify-end mb-8">
+          {/* <div className="items-right flex justify-end mb-8">
             <button
               className="text-black bg-[#F9DBB3] rounded-full px-4 py-2 w-fit flex justify-center items-center font-semibold"
               onClick={handleClick}
             >
               SORT BY <BsChevronDown className="text-black" />
             </button>
-          </div>
+          </div> */}
           <div className="grid xl:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-12 items-center justify-items-center">
             {artWorks.map((artwork, index) => {
               return (
@@ -144,6 +149,16 @@ const Products = () => {
           </div>
         </div>
       </Link>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#2c2c2c] md:w-[50vw] w-[80vw] space-y-4 p-4 rounded-lg">
+          hello
+        </div>
+      </Modal>
     </div>
   );
 };

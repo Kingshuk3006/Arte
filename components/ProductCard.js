@@ -37,7 +37,7 @@ const ProductCard = ({
               View
             </button>
           </Link>
-          <RiShoppingBasketLine className="text-2xl text-[#F9DBB3] " />
+          {/* <RiShoppingBasketLine className="text-2xl text-[#F9DBB3] " /> */}
         </div>
       </div>
     </div>
