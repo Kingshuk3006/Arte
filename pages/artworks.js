@@ -10,6 +10,8 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { AiOutlineClose } from "react-icons/ai";
 import { CgCloseO } from "react-icons/cg";
+import { CircularProgress } from "@mui/material";
+
 import {
   addDoc,
   collection,
@@ -24,20 +26,9 @@ import { db, storage } from "../firebase";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import ArtWorkCard from "../components/ArtWorkCard";
 
-const heights = [
-  150, 30, 90, 70, 110, 150, 130, 80, 50, 90, 100, 150, 30, 50, 80,
-];
-
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-  ...theme.typography.body2,
-  padding: theme.spacing(0.5),
-  textAlign: "center",
-  color: theme.palette.text.secondary,
-}));
-
 const Article = () => {
   const [open, setOpen] = React.useState(false);
+  const [open2, setOpen2] = React.useState(false);
   const [selectedFile, setSelectedFile] = useState("");
   const [caption, setCaption] = useState("");
   const [showImageSrc, setShowImageSrc] = useState("");
@@ -46,12 +37,18 @@ const Article = () => {
   const [loading, setLoading] = useState(false);
   const [Allartworks, setAllArtworks] = useState([]);
   const router = useRouter();
+  const [openedArtWork, setOpenedArtWork] = useState(null);
 
   const { data: session } = useSession();
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
     RemoveData();
+  };
+  const handleOpen2 = () => setOpen(true);
+  const handleClose2 = () => {
+    setOpen2(false);
+    setOpenedArtWork(null);
   };
 
   const addArtTag = () => {
@@ -182,23 +179,31 @@ const Article = () => {
     <div className="bg-[#0F0F0F]">
       <Navbar />
       <div className="max-w-[1280px] xl:mx-auto lg:mx-16 md:mx-8 mx-4 text-white min-h-screen ">
-
         <div>
-          {Allartworks ? (
+          {Allartworks.length !== 0 ? (
             <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-8 place-items-center">
               {Allartworks?.map((artwork, i) => {
                 return (
-                  <ArtWorkCard
-                    key={i}
-                    id={artwork.id}
-                    image={artwork.data().artWork}
-                    name={artwork.data().name}
-                  />
+                  <div
+                    onClick={() => {
+                      setOpen2(true);
+                      setOpenedArtWork(artwork.data());
+                    }}
+                  >
+                    <ArtWorkCard
+                      key={i}
+                      id={artwork.id}
+                      image={artwork.data().artWork}
+                      name={artwork.data().name}
+                    />
+                  </div>
                 );
               })}
             </div>
           ) : (
-            <div>No ArtWork!!</div>
+            <div className="h-screen flex justify-center items-center">
+              <CircularProgress />
+            </div>
           )}
         </div>
       </div>
@@ -229,7 +234,7 @@ const Article = () => {
           <textarea
             className="bg-transparent w-full px-4 py-3 focus:outline-none border border-[#f9dbb341] rounded-md text-white"
             rows={5}
-            placeholder="Add some Caption"
+            placeholder="Add some Name"
             onChange={(e) => setCaption(e.target.value)}
             value={caption}
           />
@@ -311,6 +316,48 @@ const Article = () => {
                 Add
               </button>
             )}
+          </div>
+        </div>
+      </Modal>
+      <Modal
+        open={open2}
+        onClose={handleClose2}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#2c2c2c] md:w-[70vw] w-[90vw]  outline-none space-y-4 p-4 rounded-lg ">
+          <div className="grid md:grid-cols-2 grid-cols-1 gap-8 justify-content-center align-content-center">
+            <img src={openedArtWork?.artWork} className="max-h-full " />
+            <div className="space-y-8">
+              <h1 className="font-Playfair text-3xl text-white text-center w-full">
+                {openedArtWork?.caption}
+              </h1>
+              <div className="space-y-4">
+                <h1 className="text-[#F9DBB3] text-xl mb-4">Related Tag :</h1>
+                <div className="space-x-4 space-y-4 flex justify-start flex-wrap">
+                  {openedArtWork?.tags.map((name, i) => {
+                    return (
+                      <button className="btn-brown bg-transparent hover:text-black duration-200 text-white border-[#f9dbb356] border font-light py-2 px-4 w-fit text-lg">
+                        {name}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <section className="flex flex-col justify-start space-y-2 items-center">
+                <img
+                  src={openedArtWork?.image}
+                  className="rounded-full h-36 w-36  object-cover"
+                />
+                <h1 className="text-[#F9DBB3] md:text-2xl text-xl font-Roboto_flex">
+                  {openedArtWork?.name}
+                </h1>
+                <h1 className="text-[#f9dbb369] md:text-lg text-md font-Roboto_flex">
+                  {openedArtWork?.timestamp.toDate().toDateString()}
+                </h1>
+              </section>
+            </div>
           </div>
         </div>
       </Modal>
