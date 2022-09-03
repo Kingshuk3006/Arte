@@ -11,11 +11,7 @@ const HeroSection = () => {
         </p>
       </div>
       <div>
-        <img
-          src="/images/heroimage.svg"
-          alt="heroimage"
-          className="md:w-[30rem] w-[20rem]"
-        />
+        <img src="/images/heroimage.png" className="md:w-[30rem] w-[20rem]" />
       </div>
     </div>
   );
