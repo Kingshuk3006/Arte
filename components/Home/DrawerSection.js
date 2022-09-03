@@ -25,7 +25,7 @@ const DrawerSection = () => {
   const {data:session} = useSession()
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   return (
-    <div className="font-gilroy">
+    <div className="font-gilroy w-full">
       <IconButton onClick={() => setIsDrawerOpen(true)}>
         <img src="/images/hamburger.svg" alt="hamburger" />
       </IconButton>
@@ -56,7 +56,7 @@ const DrawerSection = () => {
             {session ? (
               <img
                 src={session?.user?.image || "/images/user.png"}
-                className="w-12 h-12 rounded-full object-cover cursor-pointer"
+                className="w-12 h-12 rounded-full object-cover cursor-pointer mx-auto"
               />
             ) : (
               <Link href="/auth/signin">

@@ -18,7 +18,6 @@ export default function Home() {
   const { data: session, status } = useSession();
 
   const uid = session && session.user.uid;
-  console.log(session, uid);
   const router = useRouter();
   const [loading, setLoading] = useState(true);
 

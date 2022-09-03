@@ -40,7 +40,6 @@ const ArtWorkCard = ({ id, name, image }) => {
     }
   }, [likes]);
 
-  console.log(hasliked, "liked?");
 
   return (
     <div className="relative w-fit">

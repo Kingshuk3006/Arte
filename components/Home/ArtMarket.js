@@ -7,12 +7,12 @@ import { useRouter } from "next/router";
 import ProductCard from "../ProductCard";
 import * as animation from "../../pages/animation2.json";
 import Lottie from "react-lottie";
+import { Link } from "@material-ui/core";
 
 const ArtMarket = () => {
   const [allProducts, setAllProducts] = useState([]);
   const router = useRouter();
   useEffect(() => {
-    console.log("function called");
     return onSnapshot(
       query(collection(db, "products"), orderBy("timestamp", "desc")),
       (snapshot) => {
@@ -44,7 +44,10 @@ const ArtMarket = () => {
         </div>
       </h1>
       <h1 className="text-xl md:text-2xl lg:text-3xl xl:text-4xl space-y-4 text-center leading-relaxed">
-        <button className="btn-brown">Explore</button> Arte Art Market
+        <Link href="/ecommerce/products">
+          <button className="btn-brown mr-4">Explore</button>
+        </Link>
+        Arte Art Market
       </h1>
       <div className="grid xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 gap-8 place-items-center">
         {allProducts.map((product, i) => {
@@ -67,13 +70,18 @@ const ArtMarket = () => {
       </div>
       <div className="text-xl md:text-2xl lg:text-3xl xl:text-4xl space-y-8 text-center leading-relaxed">
         <h1>
-          <button className="btn-brown">Sell</button> Your Art Work
+          <Link href="/ecommerce/addProductforSell">
+            <button className="btn-brown mr-4">Sell</button>
+          </Link>
+          Your Art Work
         </h1>
       </div>
       <hr className="border-[#363636] border w-3/5 mx-auto" />
       <div className="grid md:grid-cols-2 grid-cols-1 gap-8 text-white place-items-center">
         <h1 className="text-xl md:text-2xl lg:text-3xl xl:text-4xl space-y-4">
-          <button className="btn-brown mb-4">Ask Artist</button>
+          <Link href="/ecommerce/ask-artist">
+            <button className="btn-brown mb-4 mr-4">Ask Artist</button>
+          </Link>
           <br /> to draw your{" "}
           <span className="text-[#F9DBB3]">dream ArtWork!</span>
         </h1>

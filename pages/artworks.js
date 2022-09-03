@@ -166,7 +166,6 @@ const Article = () => {
   };
 
   React.useEffect(() => {
-    console.log("function called");
     return onSnapshot(
       query(collection(db, "Artworks"), orderBy("timestamp", "desc")),
       (snapshot) => {

@@ -143,7 +143,7 @@ const IndividuaProduct = () => {
               >
                 Add to Cart
               </button>
-              <button className="btn-brown w-full">Buy</button>
+              <button className="btn-brown w-full" onClick={()=> {handleAddtoCart(); router.push(`/ecommerce/buy/${session?.user?.uid}`) }}>Buy</button>
             </div>
           </section>
         </div>

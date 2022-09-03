@@ -17,7 +17,6 @@ const Referenes = () => {
   const router = useRouter();
   const [Allartworks, setAllArtworks] = useState([]);
   useEffect(() => {
-    console.log("function called");
     return onSnapshot(
       query(collection(db, "Artworks"), orderBy("timestamp", "desc")),
       (snapshot) => {

@@ -5,7 +5,6 @@ import Navbar from '../../components/Home/Hero/Navbar';
 import Footer from '../../components/Home/Footer';
 
 const login = ({providers}) => {
-  console.log(providers)
   return (
     <div className="min-h-[70vh] bg-[#0F0F0F] relative">
     <Navbar/>

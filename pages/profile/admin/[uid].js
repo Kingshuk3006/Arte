@@ -38,7 +38,6 @@ const AdminProfile = () => {
 
   const router = useRouter();
   const userID = router.query.uid;
-  console.log(userID);
   const sessionUID = session && session?.user?.uid;
 
   const fetchUserDetails = React.useCallback(async () => {

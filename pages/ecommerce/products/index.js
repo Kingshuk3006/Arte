@@ -73,7 +73,6 @@ const Products = () => {
       let filtered = allArtWorks.filter((product) =>
         product.title.toLowerCase().includes(searchInput.toLowerCase())
       );
-      console.log(filtered, "artwork filtered");
       setAllArtworks(filtered);
     }
   };

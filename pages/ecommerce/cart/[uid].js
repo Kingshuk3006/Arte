@@ -48,15 +48,12 @@ const IndividualCart = () => {
     }
   }, [userData]);
 
-  console.log(price, "tp");
-
   const RemoveCartItem = async () => {
     await fetchUserDetails();
     let cartItems = userData?.cart;
-    console.log(cartItems, "before");
     const removeIndex = cartItems.findIndex((item) => item.id === removeID);
     cartItems.splice(removeIndex, 1);
-    console.log(cartItems);
+
     const userRef = doc(db, "users", uid);
 
     await updateDoc(userRef, {

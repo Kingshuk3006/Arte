@@ -5,7 +5,6 @@ import Map from '../components/nearYou/Map';
 import AddressAutofill from 'react-map-gl';
 
 const Nearyou = ({locationData}) => {
-  console.log(locationData)
   return (
     <div className="bg-[#0F0F0F]">
       <Navbar />
