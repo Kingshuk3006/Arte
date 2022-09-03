@@ -33,7 +33,11 @@ const ArtWorkCard = ({ id, name, image }) => {
   }, [db, id]);
 
   useEffect(() => {
-    setHasLiked(likes.findIndex((like) => like.id === session.user.uid) !== -1);
+    if (session) {
+      setHasLiked(
+        likes.findIndex((like) => like.id === session.user.uid) !== -1
+      );
+    }
   }, [likes]);
 
   console.log(hasliked, "liked?");

@@ -10,6 +10,8 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { useRouter } from "next/router";
+import { AiTwotoneDelete } from "react-icons/ai";
+import { useEffect } from "react";
 
 const AskCard = ({ description, name, email, image, time, askers, askId }) => {
   const [open, setOpen] = React.useState(false);
@@ -76,7 +78,7 @@ const AskCard = ({ description, name, email, image, time, askers, askId }) => {
   };
 
   return (
-    <div className="bg-[#1b1b1b88] rounded-xl border border-[#f9dbb341] w-full flex flex-col space-y-4 text-[#ffffffbe] font-Roboto_flex py-4 md:px-8 px-4">
+    <div className="bg-[#1b1b1b88] rounded-xl border border-[#f9dbb341] w-full flex flex-col space-y-4 text-[#ffffffbe] font-Roboto_flex py-4 md:px-8 px-4 relative">
       <section className="flex justify-start space-x-4 items-center">
         <img src={image} className="w-12 h-12 rounded-full object-cover" />
         <h1 className="text-[#F9DBB3] text-lg">{name}</h1>
@@ -112,7 +114,6 @@ const AskCard = ({ description, name, email, image, time, askers, askId }) => {
           )}
         </div>
       </div>
-
       <div className={`text-white ${open ? "block" : "hidden"} `}>
         <div className="flex flex-col space-y-8">
           <section className="flex flex-col space-y-4">
@@ -174,6 +175,16 @@ const AskCard = ({ description, name, email, image, time, askers, askId }) => {
           </div>
         </div>
       </div>
+
+      {session && (
+        <div>
+          {email === session?.user?.email && (
+            <div className="absolute top-4 right-4">
+              <AiTwotoneDelete className="text-red-500 hover:text-600 text-2xl" />
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

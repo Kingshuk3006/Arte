@@ -4,10 +4,10 @@ import Navbar from "../../../components/Home/Hero/Navbar";
 import ProductCard from "../../../components/ProductCard";
 import { BiSearchAlt } from "react-icons/bi";
 import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import { BsChevronDown } from "react-icons/bs";
 import { GrBasket } from "react-icons/gr";
 import { useSession } from "next-auth/react";
+import Modal from "@mui/material/Modal";
+
 import {
   collection,
   getDocs,
