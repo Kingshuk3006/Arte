@@ -9,6 +9,7 @@ import {useSession} from 'next-auth/react';
 const Ecommerce = () => {
   const {data: session, status} = useSession ();
   
+  
   return (
     <div className="bg-[#0F0F0F]">
       <Navbar />

@@ -26,24 +26,18 @@ const Referenes = () => {
     );
   }, [db, router.isReady]);
 
-  useEffect(() => {
-    if (Allartworks) {
-      console.log(Allartworks);
-      let artWorks = Allartworks ? [...Allartworks] : [];
-
-      if (artWorks.length > 5) {
-        artWorks.length = 5;
-      }
-      setAllArtworks(artWorks);
-    }
-  }, []);
-
   // console.log(artWorks, "svnsfvn");
 
   return (
-    <div className="max-w-[1280px] xl:mx-auto lg:mx-16 md:mx-8 mx-4 text-white min-h-screen  bg-[#0F0F0F] lg:space-y-16 space-y-8 font-Roboto_flex">
+    <div className="max-w-[1280px] xl:mx-auto lg:mx-16 md:mx-8 mx-4 text-white xl:py-16 py-8  bg-[#0F0F0F] lg:space-y-16 space-y-8 font-Roboto_flex">
       <h1 className="font-Playfair text-[#F9DBB3] md:text-5xl text-4xl text-center w-full">
-        Art Works
+      <div className="relative flex py-5 items-center">
+          <div className="flex-grow border-t border-[#363636]" />
+          <span className="flex-shrink mx-12">
+            <h1>Artworks</h1>
+          </span>
+          <div className="flex-grow border-t border-[#363636]" />
+        </div>
       </h1>
       <div className="grid md:grid-cols-2 grid-cols-1 gap-8 text-white place-items-center">
         <section className="text-xl md:text-2xl lg:text-3xl xl:text-4xl space-y-4">
@@ -71,16 +65,19 @@ const Referenes = () => {
               {Allartworks.length !== 0 ? (
                 <div>
                   {Allartworks.map((item, i) => {
-                    return (
-                      <SwiperSlide key={i} style={{ height: "100%" }}>
-                        <div className=" w-full bg-[#0F0F0F] h-[28rem]">
-                          <img
-                            src={item.data().artWork}
-                            className="my-auto h-full w-full object-contain"
-                          />
-                        </div>
-                      </SwiperSlide>
-                    );
+                    if (i > 5) return;
+                    else {
+                      return (
+                        <SwiperSlide key={i} style={{ height: "100%" }}>
+                          <div className=" w-full bg-[#0F0F0F] h-[28rem]">
+                            <img
+                              src={item.data().artWork}
+                              className="my-auto h-full w-full object-contain"
+                            />
+                          </div>
+                        </SwiperSlide>
+                      );
+                    }
                   })}
                 </div>
               ) : (

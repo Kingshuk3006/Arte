@@ -28,6 +28,7 @@
     "react-dom": "18.1.0",
     "react-google-maps": "^9.4.5",
     "react-icons": "^4.4.0",
+    "react-lottie": "^1.2.3",
     "react-map-gl": "^7.0.17",
     "react-swiper": "^0.1.5",
     "shortid": "^2.2.16",
