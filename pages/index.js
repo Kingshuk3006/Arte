@@ -41,11 +41,11 @@ export default function Home() {
   return (
     <div className="w-full overflow-x-hidden bg-[#0F0F0F]">
       <Hero />
-      <Article />
-      <Nearyou />
+      {/* <Article /> */}
+      {/* <Nearyou /> */}
       <Referenes />
-      <Artwork />
-      <Tutorial />
+      {/* <Artwork /> */}
+      {/* <Tutorial /> */}
       <Footer />
     </div>
   );

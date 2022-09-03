@@ -499,7 +499,7 @@ const AddProductforSell = () => {
                               <input
                                 type="file"
                                 accept="image/png, image/gif, image/jpeg"
-                                class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#f9dbb3be] hover:file:bg-[#F9DBB3] my-8"
+                                className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#f9dbb3be] hover:file:bg-[#F9DBB3] my-8"
                                 onChange={(e) => {
                                   setSelectedFile(e.target.files[0]);
                                   addImagetoPost(e);

@@ -1,58 +1,101 @@
-import {Swiper, SwiperSlide} from 'swiper/react';
+import { Swiper, SwiperSlide } from "swiper/react";
 
-import 'swiper/css';
-import 'swiper/css/effect-cards';
+import "swiper/css";
+import "swiper/css/effect-cards";
 
-import {EffectCards} from 'swiper';
+import { EffectCards } from "swiper";
+import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
+import { db } from "../../firebase";
+import { useState } from "react";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
+import Artwork from "./Artwork";
+import { Link } from "@material-ui/core";
+import { CircularProgress } from "@mui/material";
+
 const Referenes = () => {
-  return (
-    <div className="bg-[#0F0F0F] h-full">
-      <h1 className="w-[100vw] bg-referencesbg bg-contain py-8 font-Playfair text-[#F9DBB3] md:text-5xl text-4xl flex items-center justify-center text-center md:text-left">
-        References
-      </h1>
-      <div className="flex md:flex-row flex-col justify-around text-white items-center my-8 py-8 px-12 ">
-        <div className='md:w-[30%]'>
-          <h1 className="text-lg leading-loose">
-            We feel the necessity of
-            <span className="font-semibold text-[#F9DBB3]"> references </span>
-            for artists.That's why we made enrich stock of refereces with category
-          </h1>
-          <button className="bg-[#0F0F0F] border-2 border-[#F9DBB3] px-8 py-2 text-white rounded-full hover:border-[#c58d43] my-4">
-            Explore
-          </button>
-        </div>
+  const router = useRouter();
+  const [Allartworks, setAllArtworks] = useState([]);
+  useEffect(() => {
+    console.log("function called");
+    return onSnapshot(
+      query(collection(db, "Artworks"), orderBy("timestamp", "desc")),
+      (snapshot) => {
+        setAllArtworks(snapshot.docs);
+      }
+    );
+  }, [db, router.isReady]);
 
-        <div className="md:w-72 w-48 my-4">
-          <Swiper
-            effect={'cards'}
-            grabCursor={true}
-            modules={[EffectCards]}
-            className="mySwiper"
-            slideShadows={false}
-          >
-            <SwiperSlide>
-              <img src="/images/sketch.png" className="w-64" />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img src="/images/sketch.png" className="w-64" />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img src="/images/sketch.png" className="w-64" />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img src="/images/sketch.png" className="w-64" />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img src="/images/sketch.png" className="w-64" />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img src="/images/sketch.png" className="w-64" />
-            </SwiperSlide>
-          </Swiper>
-        </div>
+  useEffect(() => {
+    if (Allartworks) {
+      console.log(Allartworks);
+      let artWorks = Allartworks ? [...Allartworks] : [];
+
+      if (artWorks.length > 5) {
+        artWorks.length = 5;
+      }
+      setAllArtworks(artWorks);
+    }
+  }, []);
+
+  // console.log(artWorks, "svnsfvn");
+
+  return (
+    <div className="max-w-[1280px] xl:mx-auto lg:mx-16 md:mx-8 mx-4 text-white min-h-screen  bg-[#0F0F0F] lg:space-y-16 space-y-8 font-Roboto_flex">
+      <h1 className="font-Playfair text-[#F9DBB3] md:text-5xl text-4xl text-center w-full">
+        Art Works
+      </h1>
+      <div className="grid md:grid-cols-2 grid-cols-1 gap-8 text-white place-items-center">
+        <section className="text-xl md:text-2xl lg:text-3xl xl:text-4xl space-y-4">
+          <h1>Show Case your Artworks in Arte.</h1>
+          <h1>
+            Let make Artist Community{" "}
+            <span className="text-2xl lg:text-4xl xl:text-5xl font-semibold text-[#F9DBB3]">
+              Bigger
+            </span>
+            !!
+          </h1>
+          <Link href="/artworks">
+            <button className="btn-brown mt-4">Add Artwork</button>
+          </Link>
+        </section>
+        <section>
+          <div className="md:w-72 w-48 my-4">
+            <Swiper
+              effect={"cards"}
+              grabCursor={true}
+              modules={[EffectCards]}
+              className="mySwiper"
+              slideShadows={false}
+            >
+              {Allartworks.length !== 0 ? (
+                <div>
+                  {Allartworks.map((item, i) => {
+                    return (
+                      <SwiperSlide key={i} style={{ height: "100%" }}>
+                        <div className=" w-full bg-[#0F0F0F] h-[28rem]">
+                          <img
+                            src={item.data().artWork}
+                            className="my-auto h-full w-full object-contain"
+                          />
+                        </div>
+                      </SwiperSlide>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="flex justify-center items-center">
+                  <CircularProgress />
+                </div>
+              )}
+            </Swiper>
+          </div>
+        </section>
       </div>
     </div>
   );
 };
 
 export default Referenes;
+
+/* */

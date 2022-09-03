@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Footer from "../../components/Home/Footer";
 import Navbar from "../../components/Home/Hero/Navbar";
 import { useSession } from "next-auth/react";
@@ -34,7 +34,7 @@ const AskArtist = () => {
       writer_name: session.user.name,
       writer_image: session.user.image,
       writer_email: session.user.email,
-      askers: [],
+      askers: [session.user.uid],
       time: serverTimestamp(),
       description: description,
     });
@@ -85,7 +85,7 @@ const AskArtist = () => {
     getAskings();
   }, [getAskings]);
 
-  console.log(allAsking)
+  // console.log(allAsking)
 
   // React.useEffect (
   //   () => {

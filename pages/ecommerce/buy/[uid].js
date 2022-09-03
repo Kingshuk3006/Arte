@@ -217,8 +217,8 @@ const BuyProduct = () => {
                     className="child:bg-black bg-[#1b1b1b88] border border-[#f9dbb341] focus:outline-none px-4 py-3 text-[#F9DBB3] rounded-md"
                     value={city}
                   >
-                    {stateCity.map((city) => {
-                      return <option value={city.name}>{city.name}</option>; //Mapping through city database According to state
+                    {stateCity.map((city, i) => {
+                      return <option value={city.name} key={i}>{city.name}</option>; //Mapping through city database According to state
                     })}
                   </select>
                 )}

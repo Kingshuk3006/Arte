@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useSession } from "next-auth/react";
 import {
   arrayUnion,
+  deleteDoc,
   doc,
   getDoc,
   query,
@@ -12,9 +13,21 @@ import { db } from "../firebase";
 import { useRouter } from "next/router";
 import { AiTwotoneDelete } from "react-icons/ai";
 import { useEffect } from "react";
+import { Dialog, DialogContent } from "@mui/material";
 
-const AskCard = ({ description, name, email, image, time, askers, askId }) => {
+const AskCard = ({
+  description,
+  name,
+  email,
+  image,
+  time,
+  askers,
+  askId,
+  setDeleteID,
+}) => {
   const [open, setOpen] = React.useState(false);
+  const [open2, setOpen2] = React.useState(false);
+
   const [nameSender, setNameSender] = useState("");
   const [senderEmail, setSenderEmail] = useState("");
   const [message, setMessage] = useState("");
@@ -32,6 +45,9 @@ const AskCard = ({ description, name, email, image, time, askers, askId }) => {
     <p>${message}</p>`,
   };
 
+  const handleClose2 = () => setOpen2(false);
+  const handleOpen2 = () => setOpen2(true);
+
   const handleSendMail = async (e) => {
     console.log("Function Called");
     try {
@@ -44,7 +60,7 @@ const AskCard = ({ description, name, email, image, time, askers, askId }) => {
         body: JSON.stringify(messageAll),
       });
       alert("Message Sent Seccessfully");
-      UpdateDoc();
+      await UpdateDoc();
       handleClose();
       router.reload(window.location.pathname);
     } catch (err) {
@@ -66,15 +82,20 @@ const AskCard = ({ description, name, email, image, time, askers, askId }) => {
     console.log("Function called");
     let updateAskers = [...askers];
     updateAskers.push(session?.user?.uid);
-    console.log(updateAskers);
+    // console.log(updateAskers);
     const askRef = doc(db, "ask-artist", `${askId}`);
     try {
       await updateDoc(askRef, {
-        askers: updateAskers,
+        askers: arrayUnion(session?.user?.uid),
       });
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const deleteAsk = async () => {
+    await deleteDoc(doc(db, "ask-artist", askId));
+    router.reload(window.location.pathname);
   };
 
   return (
@@ -158,7 +179,7 @@ const AskCard = ({ description, name, email, image, time, askers, askId }) => {
             {validateForm() ? (
               <button
                 className="btn-brown w-fit"
-                onClick={() => handleSendMail()}
+                onClick={async () => await handleSendMail()}
               >
                 Send
               </button>
@@ -180,11 +201,53 @@ const AskCard = ({ description, name, email, image, time, askers, askId }) => {
         <div>
           {email === session?.user?.email && (
             <div className="absolute top-4 right-4">
-              <AiTwotoneDelete className="text-red-500 hover:text-600 text-2xl" />
+              <AiTwotoneDelete
+                className="text-red-500 hover:text-600 text-2xl cursor-pointer"
+                onClick={handleOpen2}
+              />
             </div>
           )}
         </div>
       )}
+      <Dialog
+        open={open2}
+        onClose={handleClose2}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <div className="p-6">
+          <div id="alert-dialog-title">
+            <div className="w-full text-center"><AiTwotoneDelete className="text-6xl text-red-500 mx-auto" /></div>
+            
+          </div>
+          <DialogContent className="p-10">
+            <div id="alert-dialog-description" className="w-full p-0">
+              <h1 className="text-xl font-nunito">
+                Do you want to Delete the Speaker?
+              </h1>
+            </div>
+          </DialogContent>
+          <div className="space-x-12 w-full flex justify-center">
+            <button
+              onClick={(e) => {
+                deleteAsk();
+              }}
+              className="btn-brown"
+              autoFocus
+            >
+              Yes
+            </button>
+            <button
+              onClick={() => {
+                handleClose2();
+              }}
+              className="bg-zinc-200 btn-brown text-black hover:bg-zinc-200"
+            >
+              No
+            </button>
+          </div>
+        </div>
+      </Dialog>
     </div>
   );
 };

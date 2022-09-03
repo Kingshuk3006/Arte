@@ -12,7 +12,7 @@ const CartItemCard = ({
 }) => {
   // console.log(productID);
   return (
-    <div className="bg-[#1b1b1b88] rounded-xl md:px-8 px-4 md:py-4 py-3 text-white flex flex-col md:flex-row md:justify-start justify-center md:items-start items-center space-x-4 md:space-y-0 space-y-4 relative">
+    <div className="bg-[#1b1b1b88] rounded-xl md:px-8 px-4 md:py-4 py-3 text-white flex flex-col md:flex-row md:justify-start justify-center md:items-start items-center space-x-4 md:space-y-0 space-y-4 relative pb-16 md:pb-0">
       <img src={image} className="max-w-[15rem] object-contain" />
       <div className="">
         <section className="space-y-3 h-full">
@@ -35,7 +35,7 @@ const CartItemCard = ({
           </div>
         </section>
         <button
-          className="btn-brown bg-red-500 hover:bg-red-600 p-2 hover:text-white text-sm w-fit absolute right-8 bottom-8"
+          className="btn-brown bg-red-500 hover:bg-red-600 p-2 hover:text-white text-sm w-fit absolute md:right-8 md:bottom-8 right-3 bottom-3"
           onClick={()=>setRemoveID(productID)}
         >
           Remove

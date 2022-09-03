@@ -20,7 +20,6 @@ const navbarList = [
     item: "Art Market",
     href: "/ecommerce",
   },
-  
 ];
 
 const Navbar = () => {
@@ -41,7 +40,11 @@ const Navbar = () => {
       <nav className="flex flex-row h-24 items-center justify-between xl:px-16 px-8 mx-auto max-w-[1280px]">
         <div>
           <Link href="/">
-            <img src="/images/logo.svg" alt="logo" className="w-20 cursor-pointer" />
+            <img
+              src="/images/logo.svg"
+              alt="logo"
+              className="w-20 cursor-pointer"
+            />
           </Link>
         </div>
         <div className="hidden xl:block">
@@ -77,7 +80,7 @@ const Navbar = () => {
           </Link>
         )}
         <div className="block xl:hidden">
-          <DrawerSection />
+          <DrawerSection session={session} />
         </div>
       </nav>
       <Menu

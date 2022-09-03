@@ -39,7 +39,7 @@ const Article = () => {
   const router = useRouter();
   const [openedArtWork, setOpenedArtWork] = useState(null);
 
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
@@ -185,6 +185,7 @@ const Article = () => {
               {Allartworks?.map((artwork, i) => {
                 return (
                   <div
+                  key={i}
                     onClick={() => {
                       setOpen2(true);
                       setOpenedArtWork(artwork.data());
@@ -209,12 +210,14 @@ const Article = () => {
       </div>
       <Footer />
 
-      <div
-        className="w-fit text-[#F9DBB3] rounded-full p-4 fixed right-8 bottom-8 bg-[#1b1b1b88] border-2 border-[#F9DBB3] cursor-pointer"
-        onClick={() => setOpen(true)}
-      >
-        <RiImageAddFill className="text-4xl " />
-      </div>
+      {status === "authenticated" && (
+        <div
+          className="w-fit text-[#F9DBB3] rounded-full p-4 fixed right-8 bottom-8 bg-[#1b1b1b88] border-2 border-[#F9DBB3] cursor-pointer"
+          onClick={() => setOpen(true)}
+        >
+          <RiImageAddFill className="text-4xl " />
+        </div>
+      )}
       <Modal
         open={open}
         onClose={handleClose}
@@ -292,7 +295,7 @@ const Article = () => {
               <input
                 type="file"
                 accept="image/png, image/gif, image/jpeg"
-                class="my-auto mx-auto block w-fit text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#f9dbb3be] hover:file:bg-[#F9DBB3]  py-4 h-[20rem]"
+                className="my-auto mx-auto block w-fit text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#f9dbb3be] hover:file:bg-[#F9DBB3]  py-4 h-[20rem]"
                 onChange={(e) => {
                   setSelectedFile(e.target.files[0]);
                   addImagetoPost(e);
@@ -337,7 +340,7 @@ const Article = () => {
                 <div className="space-x-4 space-y-4 flex justify-start flex-wrap">
                   {openedArtWork?.tags.map((name, i) => {
                     return (
-                      <button className="btn-brown bg-transparent hover:text-black duration-200 text-white border-[#f9dbb356] border font-light py-2 px-4 w-fit text-lg">
+                      <button className="btn-brown bg-transparent hover:text-black duration-200 text-white border-[#f9dbb356] border font-light py-2 px-4 w-fit text-lg" key={i}>
                         {name}
                       </button>
                     );

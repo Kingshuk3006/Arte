@@ -125,6 +125,7 @@ const IndividuaProduct = () => {
                 {productDetails?.tags.map((tag, index) => {
                   return (
                     <button
+                    key={index}
                       className="btn-brown bg-transparent hover:text-black duration-200 text-white border-[#f9dbb356] border font-light py-2 px-4 w-full text-lg"
                       ley={index}
                     >
@@ -148,7 +149,7 @@ const IndividuaProduct = () => {
         </div>
         <section className="xl:px-16 lg:px-12 md:px-8 px-4 mt-16 flex flex-col md:flex-row justify-start md:space-x-4 md:space-y-0 space-y-4">
           <h1 className="font-Playfair font-semibold text-[#F9DBB3] md:text-4xl text-3xl whitespace-nowrap flex items-center h-fit">
-            Artist's Word
+            Artist&apos;s Word
             <BsVectorPen className="text-[#F9DBB3] text-3xl ml-2" />
           </h1>
           <p className=" text-lg text-[#ffffffce] col-span-3 first-line:text-2xl first-line:mb-2">
