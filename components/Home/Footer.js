@@ -4,7 +4,7 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import InstagramIcon from '@mui/icons-material/Instagram';
 const footerItem = [
-  {key: Date.now (), item: 'About Us', link: '/about'},
+  {key: Date.now (), item: 'About Us', link: '/aboutus'},
   {key: Date.now (), item: 'Contact Us', link: '/contact'},
   {key: Date.now (), item: 'FAQs', link: '/faqs'},
 ];
