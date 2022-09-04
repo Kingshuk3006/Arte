@@ -24,7 +24,7 @@ import { useRouter } from "next/router";
 import AuthenticatedScreen from "../../../components/AuthenticatedScreen";
 
 const AdminProfile = () => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const [userData, setUserData] = useState(null);
   const [userShopData, setUserShopData] = useState(null);
   const [open, setOpen] = React.useState(false);
@@ -39,6 +39,13 @@ const AdminProfile = () => {
   const router = useRouter();
   const userID = router.query.uid;
   const sessionUID = session && session?.user?.uid;
+
+  React.useEffect(() => {
+    if (session && sessionUID !== userID) {
+      console.log("true");
+      router.push(`/profile/${userID}`);
+    }
+  }, []);
 
   const fetchUserDetails = React.useCallback(async () => {
     const eventRef = doc(db, "users", userID);
@@ -72,13 +79,6 @@ const AdminProfile = () => {
       return true;
     }
   };
-
-  React.useEffect(() => {
-    if (!session) return;
-    if (sessionUID !== userID) {
-      router.push(`/profile/${userID}`);
-    }
-  }, [router]);
 
   // console.log (userData, "userdta");
 
@@ -406,7 +406,11 @@ const AdminProfile = () => {
                   >
                     <option value="Select City">Select City</option>
                     {stateCity.map((city, i) => {
-                      return <option value={city.name} key={i}>{city.name}</option>; //Mapping through city database According to state
+                      return (
+                        <option value={city.name} key={i}>
+                          {city.name}
+                        </option>
+                      ); //Mapping through city database According to state
                     })}
                   </select>
                 )}

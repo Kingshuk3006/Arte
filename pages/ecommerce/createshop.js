@@ -76,8 +76,6 @@ const Createshop = () => {
     setLandmark ('');
   };
 
-  console.log (session);
-
   return (
     <div className="bg-[#0F0F0F]">
       <Navbar />
