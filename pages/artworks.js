@@ -363,7 +363,7 @@ const Article = () => {
               <section className="flex flex-col justify-start space-y-2 items-center">
                 <img
                   src={openedArtWork?.image}
-                  className="rounded-full lg:h-36 lg:w-36 object-cover"
+                  className="rounded-full lg:h-36 h-24 lg:w-36 w-24 object-cover"
                 />
                 <h1 className="text-[#F9DBB3] md:text-2xl text-xl font-Roboto_flex">
                   {openedArtWork?.name}

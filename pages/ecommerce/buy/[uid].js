@@ -135,6 +135,7 @@ const BuyProduct = () => {
                 value={address}
                 placeholder="Your Address"
                 className="bg-[#1b1b1b88] border border-[#f9dbb341] focus:outline-none px-4 py-3 placeholder:text-[#ffffff49] text-white rounded-md"
+                onChange={(e) => setAddress(e.target.value)}
               />
             </div>
             <div className="grid lg:grid-cols-2 grid-cols-1  gap-12">
@@ -143,6 +144,7 @@ const BuyProduct = () => {
                 <select
                   className="child:bg-black bg-[#1b1b1b88] border border-[#f9dbb341] focus:outline-none px-4 py-3 text-[#F9DBB3] rounded-md"
                   value={country}
+                  onChange={(e) => setCountry(e.target.value)}
                 >
                   <option value="">Enter Country</option>
                   <option value="India" className="">
@@ -215,9 +217,14 @@ const BuyProduct = () => {
                   <select
                     className="child:bg-black bg-[#1b1b1b88] border border-[#f9dbb341] focus:outline-none px-4 py-3 text-[#F9DBB3] rounded-md"
                     value={city}
+                    onChange={(e) => setCity(e.target.value)}
                   >
                     {stateCity.map((city, i) => {
-                      return <option value={city.name} key={i}>{city.name}</option>; //Mapping through city database According to state
+                      return (
+                        <option value={city.name} key={i}>
+                          {city.name}
+                        </option>
+                      ); //Mapping through city database According to state
                     })}
                   </select>
                 )}
@@ -227,6 +234,7 @@ const BuyProduct = () => {
                 <input
                   type="text"
                   value={pincode}
+                  onChange={(e) => setPincode(e.target.value)}
                   placeholder="Your Pincode"
                   className="bg-[#1b1b1b88] border border-[#f9dbb341] focus:outline-none px-4 py-3 placeholder:text-[#ffffff49] text-white rounded-md"
                 />
@@ -237,6 +245,7 @@ const BuyProduct = () => {
               <label className="text-xl text-[#F9DBB3]">Landmark</label>
               <input
                 value={landmark}
+                onChange={(e) => setLandmark(e.target.value)}
                 type="text"
                 placeholder="Your nearest landmark"
                 className="bg-[#1b1b1b88] border border-[#f9dbb341] focus:outline-none px-4 py-3 placeholder:text-[#ffffff49] text-white rounded-md w=full"
@@ -249,12 +258,18 @@ const BuyProduct = () => {
             Payment Info
           </h1>
           <div className="text-center mb-16">
-          {isPaymentDone ? <button className="btn-brown w-32 bg-[#f9dbb352] cursor-not-allowed hover:bg-[#f9dbb352]" disabled>
-              Buy
-            </button> : <button className="btn-brown w-32" onClick={makePayment}>
-              Buy
-            </button>}
-            
+            {isPaymentDone ? (
+              <button
+                className="btn-brown w-32 bg-[#f9dbb352] cursor-not-allowed hover:bg-[#f9dbb352]"
+                disabled
+              >
+                Buy
+              </button>
+            ) : (
+              <button className="btn-brown w-32" onClick={makePayment}>
+                Buy
+              </button>
+            )}
           </div>
         </div>
       </div>
