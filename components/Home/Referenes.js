@@ -12,6 +12,8 @@ import { useRouter } from "next/router";
 import Artwork from "./Artwork";
 import { Link } from "@material-ui/core";
 import { CircularProgress } from "@mui/material";
+import {Autoplay, Navigation, Pagination} from 'swiper';
+
 
 const Referenes = () => {
   const router = useRouter();
@@ -30,7 +32,7 @@ const Referenes = () => {
   return (
     <div className="max-w-[1280px] xl:mx-auto lg:mx-16 md:mx-8 mx-4 text-white xl:py-16 py-8  bg-[#0F0F0F] lg:space-y-16 space-y-8 font-Roboto_flex">
       <h1 className="font-Playfair text-[#F9DBB3] md:text-5xl text-4xl text-center w-full">
-      <div className="relative flex py-5 items-center">
+        <div className="relative flex py-5 items-center">
           <div className="flex-grow border-t border-[#363636]" />
           <span className="flex-shrink mx-12">
             <h1>Artworks</h1>
@@ -55,11 +57,13 @@ const Referenes = () => {
         <section>
           <div className="md:w-72 w-48 my-4">
             <Swiper
-              effect={"cards"}
-              grabCursor={true}
-              modules={[EffectCards]}
               className="mySwiper"
-              slideShadows={false}
+              pagination={true}
+              modules={[Autoplay, Pagination]}
+              autoplay={{
+          delay: 2500,
+          disableOnInteraction: false,
+        }}
             >
               {Allartworks.length !== 0 ? (
                 <div>

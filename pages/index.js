@@ -60,15 +60,15 @@ export default function Home() {
     <div className="w-full overflow-x-hidden bg-[#0F0F0F] h-screen">
       {loading ? (
         <div className="h-screen flex flex-col justify-center items-center space-y-8">
-        <Lottie
+        {/* <Lottie
           options={defaultOptions}
-          height={400}
-          width={400}
+          height={200}
+          width={200}
           // isStopped={showanimation}
           // isPaused={showanimation}
 
-        />
-        <img src="/images/logo.svg"/>
+        /> */}
+        <img src="/images/logo.svg" className="animate-bounce"/>
         </div>
         
       ) : (

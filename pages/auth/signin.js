@@ -25,7 +25,7 @@ const login = ({providers}) => {
           </div>
         </div>
       </div>
-      <img src="/images/effect.png" className='absolute top-0 right-0'/>
+      <img src="/images/effect.png" className='absolute top-0 right-0 -z-30'/>
       <Footer/>
     </div>
   );
