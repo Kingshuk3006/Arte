@@ -29,7 +29,6 @@ const AskCard = ({
   const [open2, setOpen2] = React.useState(false);
 
   const [nameSender, setNameSender] = useState("");
-  const [senderEmail, setSenderEmail] = useState("");
   const [message, setMessage] = useState("");
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -69,7 +68,7 @@ const AskCard = ({
   };
 
   const validateForm = () => {
-    if (senderEmail === "" || nameSender === "" || message === "") {
+    if ( nameSender === "" || message === "") {
       return false;
     } else {
       return true;
@@ -154,14 +153,7 @@ const AskCard = ({
             <label className="text-[#F9DBB3] md:text-xl text-lg mb-2 md:mb-0">
               Email
             </label>
-            <input
-              type="email"
-              value={senderEmail}
-              onChange={(e) => setSenderEmail(e.target.value)}
-              name=""
-              placeholder="Your Email"
-              className="bg-transparent px-4 py-3 focus:outline-none border border-[#f9dbb341] rounded-md text-white"
-            />
+           
           </section>
           <section className="flex flex-col space-y-4">
             <label className="text-[#F9DBB3] md:text-xl text-lg mb-2 md:mb-0">

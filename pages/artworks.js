@@ -25,6 +25,7 @@ import {
 import { db, storage } from "../firebase";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import ArtWorkCard from "../components/ArtWorkCard";
+import Link from "next/link";
 
 const Article = () => {
   const [open, setOpen] = React.useState(false);
@@ -337,20 +338,25 @@ const Article = () => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#2c2c2c] md:w-[70vw] w-[90vw] outline-none space-y-4 p-4 rounded-lg ">
-          <div className="grid md:grid-cols-2 grid-cols-1 gap-8 justify-content-center align-content-center">
-            <img src={openedArtWork?.artWork} className="max-h-full " />
-            <div className="space-y-8">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#2c2c2c] md:w-[70vw] w-[80vw] h-[90vh] sm:h-fit outline-none space-y-4 rounded-lg">
+          <div className="grid md:grid-cols-2 grid-cols-1 md:gap-8 gap-2 justify-content-center align-content-center">
+            <div className="bg-[#1d1c1c]">
+              <img
+                src={openedArtWork?.artWork}
+                className="mx-auto my-auto md:h-[50vh] h-[40vh] object-contain"
+              />
+            </div>
+            <div className="sm:space-y-8 sm:p-4 space-y-2 px-4">
               <h1 className="font-Playfair text-3xl text-white text-center w-full">
                 {openedArtWork?.caption}
               </h1>
               <div className="space-y-4">
-                <h1 className="text-[#F9DBB3] text-xl mb-4">Related Tag :</h1>
-                <div className="space-x-4 space-y-4 flex justify-start flex-wrap">
+                <h1 className="text-[#F9DBB3] text-xl sm:mb-4 mb-2">Related Tag :</h1>
+                <div className="space-x-4 mb-4 flex justify-start flex-wrap">
                   {openedArtWork?.tags.map((name, i) => {
                     return (
                       <button
-                        className="btn-brown bg-transparent hover:text-black duration-200 text-white border-[#f9dbb356] border font-light py-2 px-4 w-fit text-lg"
+                        className="btn-brown h-fit bg-transparent hover:text-black duration-200 text-white border-[#f9dbb356] border font-light py-2 px-4 w-fit md:text-lg text-sm"
                         key={i}
                       >
                         {name}
@@ -361,10 +367,13 @@ const Article = () => {
               </div>
 
               <section className="flex flex-col justify-start space-y-2 items-center">
-                <img
-                  src={openedArtWork?.image}
-                  className="rounded-full lg:h-36 h-24 lg:w-36 w-24 object-cover"
-                />
+                <Link href={`/profile/${session?.user?.uid}`}>
+                  <img
+                    src={openedArtWork?.image}
+                    className="rounded-full lg:h-36 h-20 lg:w-36 w-20 object-cover cursor-pointer hover:scale-105 duration-150"
+                  />
+                </Link>
+
                 <h1 className="text-[#F9DBB3] md:text-2xl text-xl font-Roboto_flex">
                   {openedArtWork?.name}
                 </h1>
