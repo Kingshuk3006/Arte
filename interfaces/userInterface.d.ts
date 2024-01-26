@@ -3,7 +3,7 @@ export default interface IUser {
     name: string;
     image: string;
     email: string;
-    role: "buyer" | "artist-buyer";
+    role: "buyer" | "buyer-seller";
     //address data
     shippingAddress: {
         address?: string;
@@ -11,15 +11,14 @@ export default interface IUser {
         pincode?: string;
         city?: string;
         state?: string;
-        country?: string;
     }
     phoneNumber: string; //with country code
     preferences?: string;
-    lastLoginTimestamp: number;
     //cart and order
     cart?: IUserCart[];
     orderHistory?: IUserOrder[]
     mailHistory?: IUserMailHistory[]
+    authCredentials?: IUserAuthCredentials
 }
 
 export default interface IUserOrder {
@@ -42,4 +41,11 @@ export default interface IUserMailHistory {
     timestamp: number;
     title: string;
     description: string;
+}
+
+export default interface IUserAuthCredentials {
+    lastLoginTimestamp?: number;
+    hashedPassword: string;
+    expirationTimestamp?: number;
+    sessionToken?: string;
 }
