@@ -1,8 +1,19 @@
-import React, { useState } from 'react'
-import PageLayout from '../../../components/Layout/pageLayout'
-import { useRouter } from 'next/router';
-import { Checkbox, Input } from '@chakra-ui/react';
-import Link from 'next/link';
+import React, { useState } from "react";
+import PageLayout from "../../../components/Layout/pageLayout";
+import { useRouter } from "next/router";
+import {
+    Checkbox,
+    Input,
+    InputGroup,
+    InputRightElement,
+} from "@chakra-ui/react";
+import Link from "next/link";
+import { MdOutlineRemoveRedEye } from "react-icons/md";
+import { FaRegEyeSlash } from "react-icons/fa6";
+import { FcGoogle } from "react-icons/fc";
+import { ImFacebook2 } from "react-icons/im";
+
+
 
 const signin = () => {
     const [email, setEmail] = useState("");
@@ -10,59 +21,119 @@ const signin = () => {
     const [isRemember, setIsRemember] = useState(false);
     const [name, setName] = useState();
     const [isLogin, setIsLogin] = useState(true);
+    const [show, setShow] = React.useState(false);
+    const handleClick = () => setShow(!show);
     const router = useRouter();
     return (
         <PageLayout>
-            <div className="md:grid-cols-2 grid grid-cols-1 justify-items-center place-items-center gap-8 h-[90vh]">
+            <div className="md:grid-cols-2 grid grid-cols-1 justify-items-center place-items-center gap-8 min-h-[90vh]">
                 <img src="/images/artist.png" />
-                <div className='w-full'>
-                    <div className='bg-black/50 py-8 px-4 rounded-xl shadow-xl shadow-[#1c1c1c]'>
-                        <div className='w-3/5 mx-auto gap-8 flex flex-col'>
-                            <h1>Enter your Name, username and password</h1>
+                <div className="w-full">
+                    <div className="bg-black/50 py-8 px-4 rounded-xl shadow-xl shadow-[#1c1c1c]">
+                        {
+                            isLogin ? <><div className="w-4/5 mx-auto 2xl:gap-8 xl:gap-5 lg:gap-4 gap-2 flex flex-col justify-center ">
+                                <h1 className="font-DMSerif text-2xl text-center">Login</h1>
+                                <h2 className="text-center">
+                                    Enter your Email and password to continue
+                                </h2>
+                                <Input
+                                    type="email"
+                                    value={email}
+                                    placeholder="Enter your Email"
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    focusBorderColor="#F9DBB3"
+                                />
+                                <InputGroup size="md">
+                                    <Input
+                                        pr="4.5rem"
+                                        type={show ? "text" : "password"}
+                                        placeholder="Enter password"
+                                        focusBorderColor="#F9DBB3"
+                                        onChange={(e) => setPassword(e.target.value)}
+                                    />
+                                    <InputRightElement width="4.5rem">
+                                        {show ? (
+                                            <MdOutlineRemoveRedEye onClick={handleClick} />
+                                        ) : (
+                                            <FaRegEyeSlash onClick={handleClick} />
+                                        )}
+                                    </InputRightElement>
+                                </InputGroup>
+                                <p className="text-right cursor-pointer ">Forgot Password</p>
+                                <button
+                                    className="btn-brown w-full"
+                                    disabled={email === "" || password === "" || name === ""}
+                                >
+                                    Submit
+                                </button>
 
-                            <Input
-                                type="name"
-                                value={name}
-                                placeholder='Enter your Name'
-                                onChange={(e: any) => setName(e.target.value)}
-                            />
-                            <Input
-                                type="email"
-                                value={email}
-                                placeholder='Enter your Name'
-                                onChange={(e) => setEmail(e.target.value)}
-                            />
-                            <Input
-                                type="password"
-                                value={password}
-                                placeholder='Enter your Name'
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
-                            <div >
-                                <p onClick={() => setIsLogin(true)}>Login</p>
-                                <Link href={"/"}>Forgot Password?</Link>
-                            </div>
-                            <div>
-                                <Checkbox
-                                    checked={isRemember}
-                                    onChange={(e: any) => setIsRemember(e.checked)}
-                                ></Checkbox>
-                                <label>Remember Me</label>
-                            </div>
-                            <button
-                                className='btn-brown w-fit'
-                                disabled={email === "" || password === "" || name === ""}
-                            >Submit</button>
-                        </div>
+                                <hr />
+                                <div className="flex justify-between items-center gap-4">
+                                    <button className="border-2 py-2 w-full flex justify-center px-4 hover:border-main_tone_primary rounded-md"><FcGoogle size={35} /></button>
+                                    <button className="border-2 py-2 w-full flex justify-center px-4 hover:border-main_tone_primary rounded-md"><ImFacebook2 size={35} color="#316FF6" /></button>
+                                </div>
+                                <hr />
+                                <p className="text-center">Don't have an account? <button className="text-main_tone_primary cursor-pointer" onClick={() => setIsLogin(false)}>Signup</button></p>
+                            </div></> : <><div className="w-4/5 mx-auto 2xl:gap-8 xl:gap-5 lg:gap-4 gap-2 flex flex-col justify-center ">
+                                <h1 className="font-DMSerif text-2xl text-center">SignUp</h1>
+                                <h2 className="text-center">
+                                    Enter your Name, Email and password to continue
+                                </h2>
+                                <Input
+                                    type="name"
+                                    value={name}
+                                    placeholder="Enter your Name"
+                                    onChange={(e: any) => setName(e.target.value)}
+                                    focusBorderColor="#F9DBB3"
+                                />
+                                <Input
+                                    type="email"
+                                    value={email}
+                                    placeholder="Enter your Email"
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    focusBorderColor="#F9DBB3"
+                                />
+                                <InputGroup size="md">
+                                    <Input
+                                        pr="4.5rem"
+                                        type={show ? "text" : "password"}
+                                        placeholder="Enter password"
+                                        focusBorderColor="#F9DBB3"
+                                        onChange={(e) => setPassword(e.target.value)}
+                                    />
+                                    <InputRightElement width="4.5rem">
+                                        {show ? (
+                                            <MdOutlineRemoveRedEye onClick={handleClick} />
+                                        ) : (
+                                            <FaRegEyeSlash onClick={handleClick} />
+                                        )}
+                                    </InputRightElement>
+                                </InputGroup>
+                                <button
+                                    className="btn-brown w-full"
+                                    disabled={email === "" || password === "" || name === ""}
+                                >
+                                    Submit
+                                </button>
+                                <hr />
+                                <div className="flex justify-between items-center gap-4">
+                                    <button className="border-2 py-2 w-full flex justify-center px-4 hover:border-main_tone_primary rounded-md"><FcGoogle size={35} /></button>
+                                    <button className="border-2 py-2 w-full flex justify-center px-4 hover:border-main_tone_primary rounded-md"><ImFacebook2 size={35} color="#316FF6" /></button>
+                                </div>
+                                <hr />
+                                <p className="text-center">Already have an account? <button className="text-main_tone_primary cursor-pointer" onClick={() => setIsLogin(true)}>Login</button></p>
+                            </div></>
+                        }
 
                     </div>
-
-
                 </div>
             </div>
-            <img src="/images/effect.png" className='absolute bottom-0 left-0 -z-30' />
+            <img
+                src="/images/effect.png"
+                className="absolute bottom-0 left-0 -z-30"
+            />
         </PageLayout>
-    )
-}
+    );
+};
 
-export default signin
+export default signin;
