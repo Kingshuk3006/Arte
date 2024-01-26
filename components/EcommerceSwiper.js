@@ -15,7 +15,7 @@ export default function EcommerceSwiper () {
 
   return (
     <div className='space-y-4 w-[22rem] md:w-[30rem] xl:w-[35rem]'>
-      <Swiper
+      {/* <Swiper
         style={{
           '--swiper-navigation-color': '#fff',
           '--swiper-pagination-color': '#fff',
@@ -101,7 +101,7 @@ export default function EcommerceSwiper () {
         <SwiperSlide>
           <img src="https://swiperjs.com/demos/images/nature-10.jpg" />
         </SwiperSlide>
-      </Swiper>
+      </Swiper> */}
     </div>
   );
 }

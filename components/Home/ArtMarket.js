@@ -7,7 +7,8 @@ import { useRouter } from "next/router";
 import ProductCard from "../ProductCard";
 import * as animation from "../../pages/animation2.json";
 import Lottie from "react-lottie";
-import { Link } from "@material-ui/core";
+import Link from "next/link";
+// import { Link } from "@material-ui/core";
 
 const ArtMarket = () => {
   const [allProducts, setAllProducts] = useState([]);
@@ -49,7 +50,7 @@ const ArtMarket = () => {
         </Link>
         Arte Art Market
       </h1>
-      <div className="grid xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 gap-8 place-items-center">
+      {/* <div className="grid xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 gap-8 place-items-center">
         {allProducts.map((product, i) => {
           if (i >= 3) return;
           else {
@@ -67,7 +68,7 @@ const ArtMarket = () => {
             );
           }
         })}
-      </div>
+      </div> */}
       <div className="text-xl md:text-2xl lg:text-3xl xl:text-4xl space-y-8 text-center leading-relaxed">
         <h1>
           <Link href="/ecommerce/addProductforSell">

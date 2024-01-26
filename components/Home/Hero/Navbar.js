@@ -2,11 +2,12 @@ import React from "react";
 import DrawerSection from "../DrawerSection";
 import Link from "next/link";
 import { useSession, signIn, signOut } from "next-auth/react";
-import { Avatar } from "@material-ui/core";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
+// import { Avatar } from "@material-ui/core";
+// import Menu from "@mui/material/Menu";
+// import MenuItem from "@mui/material/MenuItem";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import { Menu } from "@chakra-ui/react";
 const navbarList = [
   {
     item: "Home",
@@ -23,14 +24,14 @@ const navbarList = [
 ];
 
 const Navbar = () => {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
+  const [open, setOpen] = useState(false);
   const { data: session, status } = useSession();
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
+
+  const handleClick = () => {
+    setOpen(true);
   };
   const handleClose = () => {
-    setAnchorEl(null);
+    setOpen(false);
   };
   const router = useRouter();
 
@@ -52,11 +53,9 @@ const Navbar = () => {
             {navbarList.map((item) => {
               return (
                 <Link href={`${item.href}`} key={item.item}>
-                  <a>
-                    <li className="mx-8 text-white font-Inter text-lg cursor-pointer hover:text-[#F9DBB3]">
-                      {item.item}
-                    </li>
-                  </a>
+                  <li className="mx-8 text-white font-Inter text-lg cursor-pointer hover:text-[#F9DBB3]">
+                    {item.item}
+                  </li>
                 </Link>
               );
             })}
@@ -70,28 +69,18 @@ const Navbar = () => {
           />
         ) : (
           <Link href="/auth/signin">
-            <a>
-              <button
-                className={`bg-[#0F0F0F] border-2 border-[#F9DBB3] px-4 py-2 text-white rounded-full hover:border-[#c58d43] hidden xl:block`}
-              >
-                Sign In
-              </button>
-            </a>
+            <button
+              className={`bg-[#0F0F0F] border-2 border-[#F9DBB3] px-4 py-2 text-white rounded-full hover:border-[#c58d43] hidden xl:block`}
+            >
+              Sign In
+            </button>
           </Link>
         )}
         <div className="block xl:hidden">
           <DrawerSection session={session} />
         </div>
       </nav>
-      <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        MenuListProps={{
-          "aria-labelledby": "basic-button",
-        }}
-      >
+      <Menu open={open} onClose={handleClose}>
         <div className="flex flex-col space-y-2 p-2 child:cursor-pointer bg-[#000000ec] -my-2 text-[#F9DBB3]">
           <div
             onClick={() => router.push(`/profile/admin/${session?.user?.uid}`)}

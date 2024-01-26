@@ -10,9 +10,9 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import Artwork from "./Artwork";
-import { Link } from "@material-ui/core";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress } from "@chakra-ui/react";
 import {Autoplay, Navigation, Pagination} from 'swiper';
+import Link from "next/link";
 
 
 const Referenes = () => {
@@ -54,7 +54,7 @@ const Referenes = () => {
             <button className="btn-brown mt-4">Add Artwork</button>
           </Link>
         </section>
-        <section>
+        {/* <section>
           <div className="md:w-72 w-48 my-4">
             <Swiper
               className="mySwiper"
@@ -90,7 +90,7 @@ const Referenes = () => {
               )}
             </Swiper>
           </div>
-        </section>
+        </section> */}
       </div>
     </div>
   );

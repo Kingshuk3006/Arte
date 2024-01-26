@@ -5,7 +5,7 @@ import Masonry from "@mui/lab/Masonry";
 import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import { RiImageAddFill } from "react-icons/ri";
-import Modal from "@mui/material/Modal";
+// import Modal from "@mui/material/Modal";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { AiOutlineClose } from "react-icons/ai";
