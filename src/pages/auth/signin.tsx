@@ -6,24 +6,58 @@ import {
     Input,
     InputGroup,
     InputRightElement,
+    useToast,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { FaRegEyeSlash } from "react-icons/fa6";
 import { FcGoogle } from "react-icons/fc";
 import { ImFacebook2 } from "react-icons/im";
-
-
+import { ZodError, z } from 'zod'
 
 const signin = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [isRemember, setIsRemember] = useState(false);
     const [name, setName] = useState();
     const [isLogin, setIsLogin] = useState(true);
     const [show, setShow] = React.useState(false);
     const handleClick = () => setShow(!show);
     const router = useRouter();
+    const toast = useToast()
+    const emailSchema = z.string().email({ message: "Invalid email address" })
+    const nameSchema = z.string().max(50, 'name must be lesser than 50 characters').min(5, 'name must be atleast 5 characters')
+    const passwordSchema = z.string().min(8, 'password too small').regex(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$%^&*(){}[\]<>?/|\\]).{8,}$/, 'Password too weak!')
+
+    const handleCheckInputSignup = () => {
+        try {
+            nameSchema.parse(name)
+            emailSchema.parse(email)
+            passwordSchema.parse(password)
+        } catch (err: ZodError | any) {
+            toast({
+                title: err.errors[0].message,
+                status: 'error',
+                duration: 5000,
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
+    }
+    const handleCheckInputLogin = () => {
+        try {
+            emailSchema.parse(email)
+            passwordSchema.parse(password)
+        } catch (err: ZodError | any) {
+            toast({
+                title: err.errors[0].message,
+                status: 'error',
+                duration: 5000,
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
+    }
+
     return (
         <PageLayout>
             <div className="md:grid-cols-2 grid grid-cols-1 justify-items-center place-items-center gap-8 min-h-[90vh]">
@@ -62,7 +96,8 @@ const signin = () => {
                                 <p className="text-right cursor-pointer ">Forgot Password</p>
                                 <button
                                     className="btn-brown w-full"
-                                    disabled={email === "" || password === "" || name === ""}
+                                    disabled={email === '' || name === '' || password === ''}
+                                    onClick={handleCheckInputLogin}
                                 >
                                     Submit
                                 </button>
@@ -109,9 +144,11 @@ const signin = () => {
                                         )}
                                     </InputRightElement>
                                 </InputGroup>
+                                <p className='-mt-4 text-xs'>*password must be 8 char long and contain one uppercase, lowercase, number, special character</p>
                                 <button
+                                    disabled={email === '' || name === '' || password === ''}
                                     className="btn-brown w-full"
-                                    disabled={email === "" || password === "" || name === ""}
+                                    onClick={handleCheckInputSignup}
                                 >
                                     Submit
                                 </button>

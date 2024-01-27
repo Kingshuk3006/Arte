@@ -22,7 +22,7 @@ body {
 @layer base {
   @layer components {
     .btn-brown {
-      @apply cursor-pointer bg-main_tone_primary text-black rounded-md font-Karla px-4 py-2 hover:bg-main_tone_primary font-[500] ;
+      @apply cursor-pointer bg-main_tone_primary text-black rounded-md font-Karla px-4 py-2 hover:bg-main_tone_primary font-medium disabled:bg-slate-300 disabled:cursor-not-allowed;
     }
   }
 }
