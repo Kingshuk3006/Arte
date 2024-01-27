@@ -38,14 +38,15 @@ export default NextAuth({
         signIn: "/auth/signin",
     },
     callbacks: {
-        // async session({ session, token, user }) {
-        //     (session.user.username = session.user.name
-        //         .split(" ")
-        //         .join("")
-        //         .toLocaleLowerCase()),
-        //         (session.user.uid = token.sub);
-        //     return session;
+        // async signIn({ account, profile }) {
+        //     console.log(profile, account);
+        //     return true // Do different verification for other providers that don't have `email_verified`
         // },
+
+        async session({ session, token, user }) {
+            console.log(session)
+            return session
+        },
     },
-    secret: process.env.NEXTAUTH_SECRET,
+    secret: process.env.NEXT_PUBLIC_NEXTAUTH_SECRET,
 });

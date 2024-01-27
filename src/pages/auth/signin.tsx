@@ -14,6 +14,7 @@ import { FaRegEyeSlash } from "react-icons/fa6";
 import { FcGoogle } from "react-icons/fc";
 import { ImFacebook2 } from "react-icons/im";
 import { ZodError, z } from 'zod'
+import { signIn } from "next-auth/react";
 
 const signin = () => {
     const [email, setEmail] = useState("");
@@ -96,7 +97,7 @@ const signin = () => {
                                 <p className="text-right cursor-pointer ">Forgot Password</p>
                                 <button
                                     className="btn-brown w-full"
-                                    disabled={email === '' || name === '' || password === ''}
+                                    disabled={email === '' || password === ''}
                                     onClick={handleCheckInputLogin}
                                 >
                                     Submit
@@ -104,8 +105,8 @@ const signin = () => {
 
                                 <hr />
                                 <div className="flex justify-between items-center gap-4">
-                                    <button className="border-2 py-2 w-full flex justify-center px-4 hover:border-main_tone_primary rounded-md"><FcGoogle size={35} /></button>
-                                    <button className="border-2 py-2 w-full flex justify-center px-4 hover:border-main_tone_primary rounded-md"><ImFacebook2 size={35} color="#316FF6" /></button>
+                                    <button className="border-2 py-2 w-full flex justify-center px-4 hover:border-main_tone_primary rounded-md" onClick={()=>signIn('google')}><FcGoogle size={35} /></button>
+                                    <button className="border-2 py-2 w-full flex justify-center px-4 hover:border-main_tone_primary rounded-md" onClick={()=>signIn('facebook')}><ImFacebook2 size={35} color="#316FF6" /></button>
                                 </div>
                                 <hr />
                                 <p className="text-center">Don't have an account? <button className="text-main_tone_primary cursor-pointer" onClick={() => setIsLogin(false)}>Signup</button></p>
