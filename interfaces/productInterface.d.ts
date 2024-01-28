@@ -8,6 +8,7 @@ export default interface IProduct {
     customerReview?: string[];
     rating?: number;
     timestamp: number;
+    discount?: number;
 }
 
 export default interface IProductAttributes {

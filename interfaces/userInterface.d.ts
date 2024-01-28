@@ -5,25 +5,26 @@ export default interface IUser {
     email: string;
     role: "buyer" | "buyer-seller";
     //address data
-    shippingAddress: {
-        address?: string;
-        landmark?: string;
-        pincode?: string;
-        city?: string;
-        state?: string;
+    shippingAddress?: {
+        address: string;
+        landmark: string;
+        pincode: string;
+        city: string;
+        state: string;
     }
-    phoneNumber: string; //with country code
+    phoneNumber?: string; //with country code
     preferences?: string;
     //cart and order
     cart?: IUserCart[];
     orderHistory?: IUserOrder[]
     mailHistory?: IUserMailHistory[]
     authCredentials?: IUserAuthCredentials
+    created: number
 }
 
 export default interface IUserOrder {
     orderId?: string;
-    productId: string;
+    productId: string[];
     date: number;
     status: "Pending" | "Processing" | 'Confirmed' | "Shipped" | "Out for Delivery" | "Delivered" | "Cancelled" | "Refunded" | "Returned" | "On Hold" | "Completed";
     orderTotal: number;
