@@ -41,7 +41,7 @@ export default async function addProduct(product: IProduct) {
         console.log('product added successfully')
         return {
             success: true,
-            message: 'products added successfully'
+            message: 'product added successfully'
         }
 
     } catch (error) {

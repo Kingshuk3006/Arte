@@ -7,6 +7,7 @@ export default interface IArtSchool {
     emailId?: string;
     description: string;
     location: IArtSchoolLocation
+    images?: string[]
 }
 
 export default interface IArtSchoolLocation {
@@ -14,6 +15,7 @@ export default interface IArtSchoolLocation {
     landmark?: string;
     pincode?: string;
     city?: string;
+    state: string;
     //map location
     gmapLink: string;
     longitude?: number;

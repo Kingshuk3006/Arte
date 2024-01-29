@@ -1,18 +1,17 @@
 import PageLayout from "../../components/Layout/pageLayout";
 import Hero from "../../components/Hero.main";
-import getProductById from "../../functions/product/getProductById";
-import createOrder from "../../functions/order/createOrder";
-import { IOrder } from "../../interfaces/userInterface";
-import updateOrder from "../../functions/order/updateOrder";
+import createSchool from "../../functions/artSchool/addNewSchool";
+import IArtSchool from "../../interfaces/artSchoolInterface";
+import updateSchool from "../../functions/artSchool/updateSchool";
 
 
 export default function Home() {
 
   const getData = async () => {
-    const data = await updateOrder('sdcsdmc', {
-      status: 'Cancelled',
-    }, 'DZpIadsuyb95lOlX54c9')
-    console.log(data);
+    // const data = await updateSchool('rBqLbIjQzNAo8ygOSO2Q', {
+    //   email: "DN Art Academy",
+    // } as Partial<IArtSchool>)
+    // console.log(data);
 
   }
   return (
