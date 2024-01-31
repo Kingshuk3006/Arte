@@ -11,7 +11,6 @@ const artMediums: string[] = [
     "Pen and ink",
     "Digital",
     "Mixed media",
-    // Add more mediums as needed
 ];
 
 export default artMediums// Output the array of art mediums

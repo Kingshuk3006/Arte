@@ -11,6 +11,26 @@ body {
   font-family: "Karla", sans-serif !important;
 }
 
+::-webkit-scrollbar {
+  width: 10px;
+  border-radius: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #0c0b08f5; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #F9DBB3; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #f6cc96; 
+}
+
 @layer utilities {
   input[type="number"]::-webkit-inner-spin-button,
   input[type="number"]::-webkit-outer-spin-button {
@@ -19,13 +39,27 @@ body {
   }
 }
 
+.option-select{
+  background-color: #0c0b08f5 !important; 
+}
+.option-select:hover{
+  background-color: #F9DBB3 !important; 
+}
+
+.chakra-slider__filled-track{
+  background: #F9DBB3 !important;
+}
+
 @layer base {
   @layer components {
     .btn-brown {
-      @apply cursor-pointer bg-main_tone_primary text-black rounded-md font-Karla px-4 py-2 hover:bg-main_tone_primary font-medium disabled:bg-slate-300 disabled:cursor-not-allowed;
+      @apply cursor-pointer bg-main_tone_primary text-black rounded-md font-Karla px-4 py-2 hover:bg-main_tone_secondary font-medium disabled:bg-slate-300 disabled:cursor-not-allowed;
+    }
+    .btn-secondary {
+      @apply cursor-pointer text-main_tone_primary border border-main_tone_primary rounded-md font-Karla px-4 py-2 hover:bg-main_tone_secondary hover:text-black font-medium disabled:bg-slate-300 disabled:cursor-not-allowed;
     }
     .heading-primary{
-      @apply font-DMSerif text-5xl text-nowrap mb-6 w-full
+      @apply font-DMSerif text-4xl text-nowrap mb-6 w-full
     }
     .heading-secondary{
       @apply font-DMSerif text-3xl text-nowrap mb-4 w-full

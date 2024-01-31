@@ -20,7 +20,7 @@ const config: Config = {
       colors: {
         black_primary: '#0c0b08f5',
         main_tone_primary: '#F9DBB3',
-        main_tone_secondary: '#f8c582',
+        main_tone_secondary: '#f6cc96',
         sap_green: '#A9CD68',
         yellow: ' #FFFF00',
         cyan: '#00FFFF'

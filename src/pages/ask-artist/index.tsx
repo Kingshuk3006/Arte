@@ -24,9 +24,12 @@ import { FaRegClock } from "react-icons/fa6";
 import { RxDimensions } from "react-icons/rx";
 import AskArtistCard from "../../../components/ask-artist/askArtist.card";
 import { RiQuestionAnswerLine } from "react-icons/ri";
+import { useRouter } from "next/router";
 
 
 const index = () => {
+    const router = useRouter()
+
     return (
         <PageLayout>
             <div className="grid grid-cols-5 gap-8">
@@ -57,7 +60,7 @@ const index = () => {
                                 <Flex gap={2} alignItems={"center"} justifyContent={"start"}>
                                     <AccordionIcon as={IoIosArrowForward}>
                                     </AccordionIcon>
-                                    <span className="font-medium flex justify-normal items-center gap-2">Timeline <FaRegClock />
+                                    <span className="font-medium flex justify-normal items-center gap-2">Time Limit <FaRegClock />
                                     </span>
                                 </Flex>
                             </AccordionButton>
@@ -111,7 +114,7 @@ const index = () => {
                     >
                         <h1 className="heading-secondary w-fit">All Requests</h1>
                         <div className="flex justify-end items-center gap-4">
-                            <button className="btn-brown w-full">
+                            <button className="btn-brown w-full" onClick={()=>router.push('/ask-artist/create-new-request')}>
                                 Create New
                             </button>
                             <Menu>

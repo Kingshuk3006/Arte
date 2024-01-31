@@ -41,7 +41,7 @@ const index = () => {
                         <Flex align={"center"} gap={2}>
                             <Flex mr={2} gap={2} align={"center"}>
                                 <FaRegClock size={25} />
-                                <span>Timeline :</span>
+                                <span>Time Limit :</span>
                             </Flex>
                             <span>10 days</span>
                         </Flex>
