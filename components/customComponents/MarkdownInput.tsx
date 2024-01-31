@@ -11,13 +11,17 @@ import {
 import React, { useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 
-const MarkdownInput = () => {
-    const [markdownText, setMarkdownText] = useState<string>("");
+interface childProps {
+    markdownText: string,
+    updateMarkdownText: (val: string) => void
+}
+
+const MarkdownInput = ({ markdownText, updateMarkdownText }: childProps) => {
     const [boldToggle, setBoldToggle] = useState<boolean>(false);
     const [italicToggle, setItalicToggle] = useState<boolean>(false);
 
     const handleBoldClick = () => {
-        setMarkdownText(markdownText + "**");
+        updateMarkdownText(markdownText + "**");
     };
 
     const handleBoldToggle = () => {
@@ -25,7 +29,7 @@ const MarkdownInput = () => {
     };
 
     const handleItalicClick = () => {
-        setMarkdownText(markdownText + "_");
+        updateMarkdownText(markdownText + "_");
     };
 
     const handleItalicToggle = () => {
@@ -34,7 +38,7 @@ const MarkdownInput = () => {
 
     const handleTextareaChange = (e: any) => {
         const newText = e.target.value.replace(/\n/g, "  \n");
-        setMarkdownText(newText);
+        updateMarkdownText(newText);
     };
 
     return (
