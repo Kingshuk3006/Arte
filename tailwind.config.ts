@@ -18,7 +18,7 @@ const config: Config = {
         Karla: ['Karla', 'sans-serif']
       },
       colors: {
-        black_primary: '#0F0F0F',
+        black_primary: '#0c0b08f5',
         main_tone_primary: '#F9DBB3',
         main_tone_secondary: '#f8c582',
         sap_green: '#A9CD68',
