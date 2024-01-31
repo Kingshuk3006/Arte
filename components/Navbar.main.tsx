@@ -1,6 +1,5 @@
 import React from "react";
 // import DrawerSection from "../DrawerSection";
-import Link from "next/link";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useState } from "react";
 import { useRouter } from "next/router";
@@ -23,16 +22,16 @@ import { GoSignOut } from "react-icons/go";
 
 const navbarList = [
   {
-    item: "Art Works",
-    href: "/artworks",
+    item: "Ast Artist",
+    href: "/ask-artist",
   },
   {
     item: "Art Market",
-    href: "/ecommerce",
+    href: "/art-market",
   },
   {
     item: "Art School",
-    href: "/artschool",
+    href: "/art-school",
   },
 ];
 
@@ -54,7 +53,7 @@ const Navbar = () => {
             alt="logo"
             width={70}
             className="cursor-pointer"
-            onClick={() => router.push("/")}
+            onClick={() => router.push("/", '/')}
           />
         </section>
 
@@ -63,7 +62,7 @@ const Navbar = () => {
             {navbarList?.map((nav, i) => (
               <span
                 key={i}
-                onClick={() => router.push(nav.href)}
+                onClick={() => router.push(nav.href, nav.href)}
                 className="cursor-pointer hover:text-main_tone_primary"
               >
                 {nav.item}
@@ -82,7 +81,7 @@ const Navbar = () => {
               />
             </MenuButton>
             <MenuList backgroundColor={"#F9DBB3"} border={"none"}>
-              <MenuItem backgroundColor={"#F9DBB3"} textColor={"black"} _hover={{bg: '#f8c582'}}>
+              <MenuItem backgroundColor={"#F9DBB3"} textColor={"black"} _hover={{ bg: '#f8c582' }}>
                 <Flex gap={2} alignItems={"center"} justifyContent={"start"}>
                   <IoPersonOutline size={20} />
                   <span className="font-medium">Profile</span>
@@ -92,7 +91,7 @@ const Navbar = () => {
                 backgroundColor={"#F9DBB3"}
                 textColor={"black"}
                 onClick={() => signOut()}
-                _hover={{bg: '#f8c582'}}
+                _hover={{ bg: '#f8c582' }}
               >
                 <Flex gap={2} alignItems={"center"} justifyContent={"start"} >
                   <GoSignOut size={20} />
@@ -104,7 +103,7 @@ const Navbar = () => {
         ) : (
           <button
             className="btn-brown"
-            onClick={() => router.push("/auth/signin")}
+            onClick={() => router.push("/auth/signin", 'auth/signin')}
           >
             Sign In
           </button>
@@ -124,7 +123,7 @@ const Navbar = () => {
                 {navbarList?.map((nav, i: number) => (
                   <span
                     key={i}
-                    onClick={() => router.push(nav.href)}
+                    onClick={() => router.push(nav.href, nav.href)}
                     className="cursor-pointer"
                   >
                     {nav.item}

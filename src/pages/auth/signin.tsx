@@ -8,7 +8,6 @@ import {
     InputRightElement,
     useToast,
 } from "@chakra-ui/react";
-import Link from "next/link";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { FaRegEyeSlash } from "react-icons/fa6";
 import { FcGoogle } from "react-icons/fc";

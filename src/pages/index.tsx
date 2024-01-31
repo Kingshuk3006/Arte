@@ -17,7 +17,7 @@ export default function Home() {
   return (
     <PageLayout>
       <Hero />
-      <button onClick={getData}>get Data</button>
+      <button onClick={getData} className="btn-brown w-fit mx-auto">get Data</button>
     </PageLayout>
   );
 }

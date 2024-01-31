@@ -6,7 +6,7 @@
 
 
 body {
-  background-color: #0f0f0f !important;
+  background-color: #0c0b08f5 !important;
   color: white !important;
   font-family: "Karla", sans-serif !important;
 }
@@ -23,6 +23,15 @@ body {
   @layer components {
     .btn-brown {
       @apply cursor-pointer bg-main_tone_primary text-black rounded-md font-Karla px-4 py-2 hover:bg-main_tone_primary font-medium disabled:bg-slate-300 disabled:cursor-not-allowed;
+    }
+    .heading-primary{
+      @apply font-DMSerif text-5xl text-nowrap mb-6 w-full
+    }
+    .heading-secondary{
+      @apply font-DMSerif text-3xl text-nowrap mb-4 w-full
+    }
+    .tag-primary{
+      @apply border border-main_tone_primary rounded-full px-2 py-1 text-sm text-main_tone_primary
     }
   }
 }
