@@ -1,14 +1,20 @@
-import React from 'react'
-import Navbar from '../Navbar.main'
+import React from "react";
+import Navbar from "../Navbar.main";
+import { AbsoluteCenter, Spinner } from "@chakra-ui/react";
 
 interface Props {
-    children: JSX.Element[] | JSX.Element
+    children: JSX.Element[] | JSX.Element;
+    isLoading?: boolean;
 }
 
-const PageLayout = ({ children }: Props) => {
+const PageLayout = ({ children, isLoading = false }: Props) => {
     return (
-        <div className='xl:px-24 lg:px-16 md:px-8 sm:px-5 px-3 min-h-screen flex flex-col gap-4 md:gap-8 lg:gap-12 relative pb-4 md:pb-8 lg:pb-12 xl:pb-16'><Navbar />{children}</div>
-    )
-}
+        <div className="xl:px-24 lg:px-16 md:px-8 sm:px-5 px-3 min-h-screen flex flex-col gap-4 md:gap-8 lg:gap-12 relative pb-4 md:pb-8 lg:pb-12 xl:pb-16">
+            <Navbar />
+            {isLoading ? <AbsoluteCenter><Spinner /></AbsoluteCenter> : <>{children}</>}
 
-export default PageLayout
+        </div>
+    );
+};
+
+export default PageLayout;

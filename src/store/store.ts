@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
 import userReducer from '../features/userSlice'
+import askArtistReducer from '@/features/askArtistSlice'
 
 const store = configureStore({
     reducer: {
-        user: userReducer
+        user: userReducer,
+        askArtist: askArtistReducer
     }
 })
 

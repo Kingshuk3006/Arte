@@ -8,7 +8,7 @@ export default async function getRequestbyId(requestId: string) {
         const requestIdSchema = z.string()
         const res = requestIdSchema.safeParse(requestId);
         if (!res?.success) {
-            console.log(res.error)
+            console.log(res.error.errors[0].message)
             return {
                 success: false,
                 message: res.error.errors[0].message

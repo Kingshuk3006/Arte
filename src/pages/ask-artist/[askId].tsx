@@ -1,6 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import PageLayout from "../../../components/Layout/pageLayout";
-import { Avatar, Flex, Stack } from "@chakra-ui/react";
+import {
+    Avatar,
+    Flex,
+    FormControl,
+    FormHelperText,
+    FormLabel,
+    Input,
+    Stack,
+    useToast,
+} from "@chakra-ui/react";
+import ReactMarkdown from "react-markdown";
 import { LuBrush } from "react-icons/lu";
 import { FaRegClock } from "react-icons/fa6";
 import { RxDimensions } from "react-icons/rx";
@@ -8,47 +18,116 @@ import DrawRequestCard from "../../../components/ask-artist/DrawRequest.card";
 import { TbMoneybag } from "react-icons/tb";
 import { useRouter } from "next/router";
 import getRequestbyId from "../../../functions/askArtist/getRequestbyId";
-import IAskArtist from "../../../interfaces/askArtistInterface";
+import IAskArtist, { IDrawRequest } from "../../../interfaces/askArtistInterface";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { fetchRequestById } from "@/features/askArtistSlice";
+import MarkdownInput from "../../../components/customComponents/MarkdownInput";
+import { z } from "zod";
+import createDrawRequest from "../../../functions/askArtist/createDrawRequest";
+import { formatDate } from "../../../functions/formatDate";
 
 const index = () => {
-    const router = useRouter()
-    const requestId = router.query.askId as string
-    const [requestData, setRequestData] = useState<IAskArtist | null>()
+    const router = useRouter();
+    const toast = useToast()
+    const requestId = router.query.askId as string;
+    const requestData = useAppSelector((state) => state.askArtist) as {
+        data: IAskArtist | undefined | null;
+        loading: boolean
+        error: null | string
+    };
+    const dispatch = useAppDispatch();
+    const [loading, setLoading] = useState<boolean>(false)
+    const [drawRequest, setDrawRequest] = useState<{
+        message: string;
+        offerPrice: number;
+    }>({
+        message: "",
+        offerPrice: 0,
+    });
 
-    console.log(requestId);
-    
+    const handleChange = (name: string, value: any) => {
+        setDrawRequest({
+            ...drawRequest,
+            [name]: value,
+        });
+    };
 
-    const fetchData = async (requestId: string) => {
-        const data = await getRequestbyId(requestId)
-        if (data.success) {
-            setRequestData(data.data)
+    const updateMessage = (value: any) => {
+        setDrawRequest({
+            ...drawRequest,
+            message: value,
+        })
+    }
+
+
+
+    const handleSendRequest = async () => {
+        setLoading(true)
+        const maxOffer = requestData?.data?.budget as number * 1.99
+        const inputSchema = z.object({
+            offerPrice: z.number().max(maxOffer, { message: 'offer can not double of the budget' }).min(1, { message: 'Too small offer' }),
+            message: z.string().max(350, { message: 'Too large message' }).min(10, { message: 'Too small message' }),
+        })
+
+        try {
+            const parseInputs = inputSchema.safeParse(drawRequest)
+            if (!parseInputs.success) {
+                setLoading(false)
+                return toast({
+                    title: parseInputs.error.errors[0].message,
+                    status: 'error',
+                    duration: 5000,
+                    isClosable: true,
+                    position: 'top-right',
+                });
+
+            }
+
+            const data: IDrawRequest = {
+                ...drawRequest,
+                userId: 'aca',
+                name: 'Kingshuk Sarkar',
+                timestamp: Date.now(),
+                email: 'kingsarkar3006@gmail.com'
+            }
+            const res = await createDrawRequest(data, requestId)
+            if (res.success) {
+                setLoading(false)
+                return toast({
+                    title: 'Added Successfully',
+                    status: 'success',
+                    duration: 5000,
+                    isClosable: true,
+                    position: 'top-right',
+                });
+            }
+        } catch (error) {
+            console.log(error);
+            setLoading(false)
+            router.push('/error')
         }
     }
 
-    console.log(requestData);
-    
     useEffect(() => {
-        fetchData(requestId)
+        dispatch(fetchRequestById(requestId))
     }, [requestId])
 
     return (
-        <PageLayout>
+        <PageLayout isLoading={requestData.loading}>
             <div>
                 <section className="mb-4">
                     <h1 className="heading-secondary text-wrap">
-                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Velit
-                        molestias distinctio impedit ullam ut eius dolore? Delectus error
-                        ducimus molestias.
+                        {requestData.data?.title}
                     </h1>
                     <Flex align={"center"} gap={3} mb={8} className={"text-white/80"}>
-                        <span className="tag-primary">Unanswered</span>
+                        <span className="tag-primary">{requestData.data?.isAnswered ? 'Answered' : 'Unanswered'}</span>
                         <Flex align={"center"}>
                             <div className="hover:underline cursor-pointer mr-2">
-                                <Avatar size={"xs"} mr={1} name="kingshuk Sarkar" />
-                                <b>Kingshuk Sarkar</b>
+                                <Avatar size={"xs"} mr={1} name={requestData.data?.askedBy.name} />
+                                <b>{requestData.data?.askedBy.name}</b>
                             </div>
                             <p>
-                                asked this request <b>30 days ago</b>
+                                asked this request <b>{formatDate(requestData.data?.timestamp as number)} ago</b>
                             </p>
                         </Flex>
                     </Flex>
@@ -58,7 +137,7 @@ const index = () => {
                                 <LuBrush size={25} />
                                 <span>Medium of drawing :</span>
                             </Flex>
-                            <span>Water Color</span>
+                            <span>{requestData?.data?.medium}</span>
                         </Flex>
 
                         <Flex align={"center"} gap={2}>
@@ -66,7 +145,7 @@ const index = () => {
                                 <FaRegClock size={25} />
                                 <span>Time Limit :</span>
                             </Flex>
-                            <span>10 days</span>
+                            <span>{requestData?.data?.timeLimit} days</span>
                         </Flex>
 
                         <Flex align={"center"} gap={2}>
@@ -74,7 +153,7 @@ const index = () => {
                                 <RxDimensions size={25} />
                                 <span>Dimension :</span>
                             </Flex>
-                            <span>height: 30.5 width: 30.5</span>
+                            <span>height: {requestData?.data?.dimension.height} width: {requestData?.data?.dimension.width}</span>
                         </Flex>
 
                         <Flex align={"center"} gap={2}>
@@ -82,24 +161,53 @@ const index = () => {
                                 <TbMoneybag size={25} />
                                 <span>Budget :</span>
                             </Flex>
-                            <span>₹ 4000</span>
+                            <span>₹ {requestData?.data?.budget}</span>
                         </Flex>
                     </Stack>
-                    <p>
-                        Lorem isum dolor sit amet consectetur adipisicing elit. Cumque
-                        perspiciatis corrupti sint doloremque minima ea tenetur, iste ad.
-                        Voluptate, porro!Lorem ipsum dolor sit amet consectetur adipisicing
-                        elit. Cumque perspiciatis Lorem ipsum dolor sit amet consectetur
-                        adipisicing elit. Cumque perspiciatis
-                    </p>
+                    <ReactMarkdown>{requestData?.data?.description}</ReactMarkdown>
                 </section>
-                <h1 className="heading-secondary text-xl my-4">11 Accepted Request</h1>
-                <Stack spacing={4}>
-                    <DrawRequestCard />
-                    <DrawRequestCard />
-                    <DrawRequestCard />
-                    <DrawRequestCard />
-                </Stack>
+                <section>
+                    <h1 className="heading-secondary text-xl my-4">Send Draw Request</h1>
+                    <FormControl isRequired>
+                        <FormLabel fontWeight={400}>Offer Price</FormLabel>
+                        <FormHelperText pb={2}>Write the Offer Price</FormHelperText>
+                        <Input
+                            type="number"
+                            focusBorderColor="#F9DBB3"
+                            name="offerPrice"
+                            value={drawRequest.offerPrice}
+                            onChange={(e: any) =>
+                                handleChange(e.target.name, parseInt(e.target.value))
+                            }
+                            placeholder="Enter offerPrice..."
+                        />
+                        <FormHelperText>This field is required.</FormHelperText>
+                    </FormControl>
+                    <FormControl isRequired>
+                        <FormLabel fontWeight={400}>Request Message</FormLabel>
+                        <FormHelperText pb={2}>
+                            Write the description of your art word in more than 10 less than
+                            350 letters
+                        </FormHelperText>
+                        <MarkdownInput
+                            markdownText={drawRequest.message as string}
+                            updateMarkdownText={updateMessage}
+                        />
+                        <FormHelperText>This field is required.</FormHelperText>
+                        <button className="btn-brown mt-4" onClick={handleSendRequest}>Send</button>
+                    </FormControl>
+                </section>
+                <div>
+                    <h1 className="heading-secondary text-xl my-4">
+                        11 Accepted Request
+                    </h1>
+                    <Stack spacing={4}>
+                        <DrawRequestCard />
+                        <DrawRequestCard />
+                        <DrawRequestCard />
+                        <DrawRequestCard />
+                    </Stack>
+                </div>
             </div>
         </PageLayout>
     );

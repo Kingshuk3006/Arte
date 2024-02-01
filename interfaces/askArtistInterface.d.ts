@@ -16,3 +16,13 @@ export default interface IAskArtist {
     isAnswered: boolean;
     timestamp: number;
 }
+
+export interface IDrawRequest {
+    userId: string;
+    message: string;
+    name: string;
+    timestamp: number;
+    email: string;
+    offerPrice: number;
+    finalPrice?: number;
+}
