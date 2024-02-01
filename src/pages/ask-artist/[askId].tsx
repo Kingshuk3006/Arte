@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PageLayout from "../../../components/Layout/pageLayout";
 import { Avatar, Flex, Stack } from "@chakra-ui/react";
 import { LuBrush } from "react-icons/lu";
@@ -6,8 +6,31 @@ import { FaRegClock } from "react-icons/fa6";
 import { RxDimensions } from "react-icons/rx";
 import DrawRequestCard from "../../../components/ask-artist/DrawRequest.card";
 import { TbMoneybag } from "react-icons/tb";
+import { useRouter } from "next/router";
+import getRequestbyId from "../../../functions/askArtist/getRequestbyId";
+import IAskArtist from "../../../interfaces/askArtistInterface";
 
 const index = () => {
+    const router = useRouter()
+    const requestId = router.query.askId as string
+    const [requestData, setRequestData] = useState<IAskArtist | null>()
+
+    console.log(requestId);
+    
+
+    const fetchData = async (requestId: string) => {
+        const data = await getRequestbyId(requestId)
+        if (data.success) {
+            setRequestData(data.data)
+        }
+    }
+
+    console.log(requestData);
+    
+    useEffect(() => {
+        fetchData(requestId)
+    }, [requestId])
+
     return (
         <PageLayout>
             <div>

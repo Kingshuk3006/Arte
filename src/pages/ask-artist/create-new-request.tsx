@@ -42,7 +42,7 @@ const createNewRequest = () => {
     description: "",
     budget: 0,
     medium: "",
-    timeLimit: 0,
+    timeLimit: 1,
     dimension: {
       height: 0,
       width: 0,
@@ -197,6 +197,9 @@ const createNewRequest = () => {
               mt={10}
               onChange={(val) => handleChange("timeLimit", val)}
               value={formData.timeLimit}
+              max={60}
+              min={1}
+              
             >
               <SliderMark
                 value={formData.timeLimit}
@@ -285,13 +288,13 @@ const createNewRequest = () => {
           </Box>
         </Stack>
         {loading && (
-        <Box
-          className="absolute inset-0 bg-gray-800 opacity-75 flex justify-center items-center"
-          zIndex="overlay"
-        >
-          <Spinner size="xl" color="#F9DBB3" />
-        </Box>
-      )}
+          <Box
+            className="absolute inset-0 bg-gray-800 opacity-75 flex justify-center items-center"
+            zIndex="overlay"
+          >
+            <Spinner size="xl" color="#F9DBB3" />
+          </Box>
+        )}
       </div>
     </PageLayout>
   );
