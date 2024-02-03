@@ -18,6 +18,7 @@ export default interface IAskArtist {
 }
 
 export interface IDrawRequest {
+    id?: string;
     userId: string;
     message: string;
     name: string;

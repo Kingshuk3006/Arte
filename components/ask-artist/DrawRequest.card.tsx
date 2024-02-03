@@ -1,8 +1,9 @@
 import { Avatar, Flex } from "@chakra-ui/react";
 import React from "react";
 import { MdOutlineMarkEmailRead } from "react-icons/md";
+import { IDrawRequest } from "../../interfaces/askArtistInterface";
 
-const DrawRequestCard = () => {
+const DrawRequestCard = ({request}: IDrawRequest) => {
   return (
     <div className="border rounded-md border-main_tone_primary/80 flex flex-col gap-3 p-4 bg-black_primary/90">
       <Flex align={"center"} gap={2}>
