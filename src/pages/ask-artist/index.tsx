@@ -26,11 +26,11 @@ import AskArtistCard from "../../../components/ask-artist/askArtist.card";
 import { RiQuestionAnswerLine } from "react-icons/ri";
 import { useRouter } from "next/router";
 
-interface  IFilter{
-    medium: string;
-    timeLimit: number;
-    size: "" | "small" | "medium" | "large";
-  }
+export interface IFilter {
+  medium?: string;
+  timeLimit?: number;
+  size?: "" | "small" | "medium" | "large";
+}
 
 const index = () => {
   const router = useRouter();

@@ -19,24 +19,21 @@ import { RxDimensions } from "react-icons/rx";
 import DrawRequestCard from "../../../components/ask-artist/DrawRequest.card";
 import { TbMoneybag } from "react-icons/tb";
 import { useRouter } from "next/router";
-import getRequestbyId from "../../../functions/askArtist/getRequestbyId";
-import IAskArtist, {
-    IDrawRequest,
-} from "../../../interfaces/askArtistInterface";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { fetchRequestById } from "@/features/askArtistSlice";
+// import { fetchRequestById } from "@/features/askArtistSlice";
 import MarkdownInput from "../../../components/customComponents/MarkdownInput";
 import { z } from "zod";
-import createDrawRequest from "../../../functions/askArtist/createDrawRequest";
+
 import { formatDate } from "../../../functions/formatDate";
-import getAllDrawRequests from "../../../functions/askArtist/getAllDrawRequests";
+import IDrawRequest from "../../../interfaces/askArtistInterface";
+
 
 const index = () => {
     const router = useRouter();
     const toast = useToast();
     const requestId = router.query.askId as string;
     const requestData = useAppSelector((state) => state.askArtist) as {
-        data: IAskArtist | undefined | null;
+        data: IDrawRequest | undefined | null;
         loading: boolean;
         error: null | string;
     };
@@ -65,73 +62,73 @@ const index = () => {
         });
     };
 
-    const handleSendRequest = async () => {
-        setLoading(true);
-        const maxOffer = (requestData?.data?.budget as number) * 1.99;
-        const inputSchema = z.object({
-            offerPrice: z
-                .number()
-                .max(maxOffer, { message: "offer can not double of the budget" })
-                .min(1, { message: "Too small offer" }),
-            message: z
-                .string()
-                .max(350, { message: "Too large message" })
-                .min(10, { message: "Too small message" }),
-        });
+    // const handleSendRequest = async () => {
+    //     setLoading(true);
+    //     const maxOffer = (requestData?.data?.budget as number) * 1.99;
+    //     const inputSchema = z.object({
+    //         offerPrice: z
+    //             .number()
+    //             .max(maxOffer, { message: "offer can not double of the budget" })
+    //             .min(1, { message: "Too small offer" }),
+    //         message: z
+    //             .string()
+    //             .max(350, { message: "Too large message" })
+    //             .min(10, { message: "Too small message" }),
+    //     });
 
-        try {
-            const parseInputs = inputSchema.safeParse(drawRequest);
-            if (!parseInputs.success) {
-                setLoading(false);
-                return toast({
-                    title: parseInputs.error.errors[0].message,
-                    status: "error",
-                    duration: 5000,
-                    isClosable: true,
-                    position: "top-right",
-                });
-            }
+    //     try {
+    //         const parseInputs = inputSchema.safeParse(drawRequest);
+    //         if (!parseInputs.success) {
+    //             setLoading(false);
+    //             return toast({
+    //                 title: parseInputs.error.errors[0].message,
+    //                 status: "error",
+    //                 duration: 5000,
+    //                 isClosable: true,
+    //                 position: "top-right",
+    //             });
+    //         }
 
-            const data: IDrawRequest = {
-                ...drawRequest,
-                userId: "sdcsdmc",
-                name: "Kingshuk Sarkar",
-                timestamp: Date.now(),
-                email: "kingsarkar3006@gmail.com",
-            };
-            const res = await createDrawRequest(data, requestId);
-            if (res.success) {
-                setLoading(false);
-                return toast({
-                    title: "Added Successfully",
-                    status: "success",
-                    duration: 5000,
-                    isClosable: true,
-                    position: "top-right",
-                });
-            }
-        } catch (error) {
-            console.log(error);
-            setLoading(false);
-            router.push("/error");
-        }
-    };
+    //         const data: IDrawRequest = {
+    //             ...drawRequest,
+    //             userId: "sdcsdmc",
+    //             name: "Kingshuk Sarkar",
+    //             timestamp: Date.now(),
+    //             email: "kingsarkar3006@gmail.com",
+    //         };
+    //         const res = await createDrawRequest(data, requestId);
+    //         if (res.success) {
+    //             setLoading(false);
+    //             return toast({
+    //                 title: "Added Successfully",
+    //                 status: "success",
+    //                 duration: 5000,
+    //                 isClosable: true,
+    //                 position: "top-right",
+    //             });
+    //         }
+    //     } catch (error) {
+    //         console.log(error);
+    //         setLoading(false);
+    //         router.push("/error");
+    //     }
+    // };
 
-    useEffect(() => {
-        setLoading(true)
-        if (requestId) {
-            dispatch(fetchRequestById(requestId));
-            fetchDrawRequest(requestId);
-        }
+    // useEffect(() => {
+    //     setLoading(true)
+    //     if (requestId) {
+    //         dispatch(fetchRequestById(requestId));
+    //         fetchDrawRequest(requestId);
+    //     }
 
-        setLoading(false)
-    }, [requestId]);
+    //     setLoading(false)
+    // }, [requestId]);
 
 
-    const fetchDrawRequest = async (requestId: string) => {
-        const drawRequests = await getAllDrawRequests(requestId);
-        setDrawRequestData(drawRequests.drawRequests as IDrawRequest[])
-    }
+    // const fetchDrawRequest = async (requestId: string) => {
+    //     const drawRequests = await getAllDrawRequests(requestId);
+    //     setDrawRequestData(drawRequests.drawRequests as IDrawRequest[])
+    // }
 
 
     return (
@@ -229,7 +226,9 @@ const index = () => {
                                 updateMarkdownText={updateMessage}
                             />
                             <FormHelperText>This field is required.</FormHelperText>
-                            <button className="btn-brown mt-4" onClick={handleSendRequest}>
+                            <button className="btn-brown mt-4"
+                            //  onClick={handleSendRequest}
+                             >
                                 Send
                             </button>
                         </FormControl>
@@ -240,7 +239,7 @@ const index = () => {
                         </h1>
                         <Stack spacing={4}>
                             {
-                                drawRequestData?.map((request)=>{
+                                drawRequestData?.map((request, i)=>{
                                     return(
                                         <DrawRequestCard request={request} key={i}/>
                                     )

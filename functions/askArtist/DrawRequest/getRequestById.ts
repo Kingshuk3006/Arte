@@ -1,7 +1,7 @@
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "../../database/firebase";
 import { z } from "zod";
-import IAskArtist from "../../interfaces/askArtistInterface";
+import { db } from "../../../database/firebase";
+import IDrawRequest from "../../../interfaces/askArtistInterface";
 
 export default async function getRequestbyId(requestId: string) {
     try {
@@ -20,7 +20,7 @@ export default async function getRequestbyId(requestId: string) {
             return {
                 success: true,
                 message: 'request fetched successfully',
-                data: requestSnapshot.data() as IAskArtist
+                data: requestSnapshot.data() as IDrawRequest
             }
         } else {
             console.log("no request found!");

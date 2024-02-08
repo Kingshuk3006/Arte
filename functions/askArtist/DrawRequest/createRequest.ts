@@ -1,8 +1,8 @@
 import { addDoc, collection } from "firebase/firestore"
-import IAskArtist from "../../interfaces/askArtistInterface"
-import { db } from "../../database/firebase"
+import { db } from "../../../database/firebase"
+import IDrawRequest from "../../../interfaces/askArtistInterface"
 
-const createRequest = async (data: IAskArtist) => {
+const createRequest = async (data: IDrawRequest) => {
     try {
         await addDoc(collection(db, 'ask-artist'), { ...data })
         console.log('Request added successfully')
