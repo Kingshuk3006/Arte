@@ -1,7 +1,7 @@
 import { collection, getDoc, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../database/firebase";
 import IUser from "../../interfaces/userInterface";
-const bcrypt = require('bcrypt');
+import bcrypt from 'bcryptjs'
 const saltRounds = 10;
 
 export default async function checkUserwithCred({
@@ -12,17 +12,19 @@ export default async function checkUserwithCred({
   password: string;
 }) {
   try {
-    let user: IUser[] = []
+    let user: IUser[] = [];
+
     const userRef = collection(db, "users");
     const q = query(userRef, where("email", "==", email));
     const querySnapshot = await getDocs(q);
-    querySnapshot.forEach(doc => {
-      user.push(doc.data() as IUser)
-    })
+    querySnapshot.forEach((doc) => {
+      user.push({ ...doc.data(), id: doc.id } as IUser);
+    });
 
     if (user.length !== 0) {
-      const hash = user[0].authCredentials?.hashedPassword
-      const match = await bcrypt.compare(password, hash);
+      const hash = user[0].authCredentials?.password
+      const match = await bcrypt.compare(password, hash as string);
+
       if (match) {
         return {
           success: true,
@@ -38,8 +40,8 @@ export default async function checkUserwithCred({
     } else {
       return {
         success: false,
-        message: 'No match found'
-      }
+        message: "No match found",
+      };
     }
   } catch (err) {
     console.log(err);

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import PageLayout from "../../../components/Layout/pageLayout";
 import { useRouter } from "next/router";
 import {
-    Checkbox,
     Input,
     InputGroup,
     InputRightElement,
@@ -13,27 +12,71 @@ import { FaRegEyeSlash } from "react-icons/fa6";
 import { FcGoogle } from "react-icons/fc";
 import { ImFacebook2 } from "react-icons/im";
 import { ZodError, z } from 'zod'
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
+import checkUserExist from "../../../functions/auth/checkUserExist";
+import createNewUser from "../../../functions/auth/createNewUser";
 
 
 const signin = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [name, setName] = useState();
-    const [isLogin, setIsLogin] = useState(true);
-    const [show, setShow] = React.useState(false);
+    const [email, setEmail] = useState<string>("");
+    const [password, setPassword] = useState<string>("");
+    const [name, setName] = useState<string>('');
+    const [isLogin, setIsLogin] = useState<boolean>(true);
+    const [show, setShow] = React.useState<boolean>(false);
     const handleClick = () => setShow(!show);
-    const router = useRouter();
     const toast = useToast()
     const emailSchema = z.string().email({ message: "Invalid email address" })
     const nameSchema = z.string().max(50, 'name must be lesser than 50 characters').min(5, 'name must be atleast 5 characters')
     const passwordSchema = z.string().min(8, 'password too small').regex(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$%^&*(){}[\]<>?/|\\]).{8,}$/, 'Password too weak!')
 
-    const handleCheckInputSignup = () => {
+    const {data:session} = useSession()
+    console.log(session)
+    const handleSignUp = async () => {
         try {
+            //check the inputs
             nameSchema.parse(name)
             emailSchema.parse(email)
             passwordSchema.parse(password)
+
+
+            //check wheather user already exists
+            const userExist = await checkUserExist(email)
+            if (userExist.success) {
+                toast({
+                    title: userExist.message,
+                    description: "Login to your account",
+                    status: 'warning',
+                    duration: 5000,
+                    isClosable: true,
+                    position: 'top-right',
+                });
+                return;
+            } else {
+                if (userExist.message === 'user doesnot exist') {
+                    const userData = {
+                        name,
+                        email,
+                        role: 'buyer',
+                        created: Date.now(),
+                        authCredentials: {
+                            password
+                        }
+                    }
+                    const id = Date.now().toString()
+                    const res = await createNewUser(userData, id)
+                    if (res?.success) {
+                        toast({
+                            title: res.message,
+                            description: "Login to your account",
+                            status: 'success',
+                            duration: 5000,
+                            isClosable: true,
+                            position: 'top-right',
+                        });
+                        setIsLogin(true)
+                    }
+                }
+            }
         } catch (err: ZodError | any) {
             toast({
                 title: err.errors[0].message,
@@ -44,10 +87,45 @@ const signin = () => {
             });
         }
     }
-    const handleCheckInputLogin = () => {
+
+
+    const handleLogin = async () => {
         try {
             emailSchema.parse(email)
             passwordSchema.parse(password)
+            const res = await signIn('credentials', {
+                email: email,
+                password: password,
+                redirect: false
+            })
+            console.log(res);
+
+            if (res?.status === 200) {
+                return toast({
+                    title: 'Login Successful',
+                    status: 'success',
+                    duration: 5000,
+                    isClosable: true,
+                    position: 'top-right',
+                });
+            } else if (res?.status === 401) {
+                return toast({
+                    title: 'Wrong Credential',
+                    status: 'error',
+                    duration: 5000,
+                    isClosable: true,
+                    position: 'top-right',
+                });
+            } else {
+                return toast({
+                    title: 'There was an error',
+                    status: 'error',
+                    duration: 5000,
+                    isClosable: true,
+                    position: 'top-right',
+                });
+            }
+
         } catch (err: ZodError | any) {
             toast({
                 title: err.errors[0].message,
@@ -98,14 +176,7 @@ const signin = () => {
                                 <button
                                     className="btn-brown w-full"
                                     disabled={email === '' || password === ''}
-                                    onClick={() => {
-                                        handleCheckInputLogin()
-                                        // signIn('credentials', {
-                                        //     email: email,
-                                        //     password: password,
-                                        //     redirect: false
-                                        // })
-                                    }}
+                                    onClick={handleLogin}
                                 >
                                     Submit
                                 </button>
@@ -156,7 +227,7 @@ const signin = () => {
                                 <button
                                     disabled={email === '' || name === '' || password === ''}
                                     className="btn-brown w-full"
-                                    onClick={handleCheckInputSignup}
+                                    onClick={handleSignUp}
                                 >
                                     Submit
                                 </button>

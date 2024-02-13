@@ -3,54 +3,46 @@ import IUser from "../../interfaces/userInterface";
 import { z } from "zod";
 import { db } from "../../database/firebase";
 import checkUserExist from "./checkUserExist";
+import bcrypt from 'bcryptjs'
 
-const userSchema = z.object({
-    name: z.string(),
-    image: z.string(),
-    email: z.string().email(),
-    role: z
-        .union([z.literal("buyer"), z.literal("buyer-seller")])
-        .default("buyer"),
-    //address data
-    authCredentials: z.array(z.object({
-        lastLoginTimestamp: z.number(),
-        hashedPassword: z.string(),
-        expirationTimestamp: z.number().optional(),
-        sessionToken: z.string().optional(),
-    })).optional(),
-    created: z.number()
-});
 
-export default async function createNewUser(user: IUser, userId: string) {
+
+interface INewUser {
+    name: string;
+    email: string;
+    role: string;
+    created: number;
+    authCredentials?: {
+        password: string
+    }
+}
+const saltRounds = 10
+
+export default async function createNewUser(user: INewUser, id: string) {
     try {
-        const res = userSchema.safeParse(user)
-        if (!res.success) {
-            console.log(res.error.errors)
-            return {
-                success: false,
-                message: res.error.errors[0].message || 'There was an type error'
-            }
-        }
 
-        const userExists = await checkUserExist(userId)
+        const userExists = await checkUserExist(user?.email)
 
-        if (userExists.success === false && userExists.message === 'there was an error') {
+        if (!userExists.success && userExists.message === 'there was an error') {
             return userExists
-        } else if (userExists.success === false && userExists.message === 'user doesnot exist') {
-            const ref = doc(db, "users", userId);
+        } else if (!userExists.success && userExists.message === 'user doesnot exist') {
+            if (user?.authCredentials?.password) {
+                const salt = bcrypt.genSaltSync(saltRounds);
+                const hash = bcrypt.hashSync(user?.authCredentials?.password, salt);
+                user = { ...user, authCredentials: { password: hash } }
+            }
+
+            const ref = doc(db, "users", id);
             await setDoc(ref, user);
 
-            console.log('new user added successfully')
+            console.log('user created successfully')
             return {
                 success: true,
                 message: 'user added successfully'
             }
         }
 
-        return {
-            success: false,
-            message: 'user already exists'
-        }
+        return userExists
 
     } catch (error) {
         console.log(error)

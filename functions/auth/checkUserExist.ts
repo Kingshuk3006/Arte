@@ -1,15 +1,22 @@
-import { doc, getDoc } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../database/firebase";
+import IUser from "../../interfaces/userInterface";
 
 
-export default async function checkUserExist(userId: string) {
+export default async function checkUserExist(email: string) {
     try {
-        const userRef = doc(db, "users", userId);
-        const userSnap = await getDoc(userRef);
-        if (userSnap.exists()) {
+        const userRef = collection(db, 'users');
+        const q = query(userRef, where("email", '==', email))
+        const userSnapShot = await getDocs(q)
+        let user: any[] = []
+        userSnapShot.forEach(doc => {
+            user.push({ ...doc.data(), id: doc.id })
+        })
+        if (userSnapShot?.size > 0) {
             return {
                 success: true,
-                message: 'user already exist'
+                message: 'user already exist',
+                user: user[0]
             }
         } else {
             return {
