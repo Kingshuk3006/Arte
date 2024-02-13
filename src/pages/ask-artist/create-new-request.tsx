@@ -23,7 +23,7 @@ import MarkdownInput from "../../../components/customComponents/MarkdownInput";
 import artMediums from "../../../database/artMedium";
 import { z } from "zod";
 import IAskArtist from "../../../interfaces/askArtistInterface";
-import createRequest from "../../../functions/askArtist/createRequest";
+import createRequest from "../../../functions/askArtist/createDrawRequest";
 import { useRouter } from "next/router";
 
 const createNewRequest = () => {

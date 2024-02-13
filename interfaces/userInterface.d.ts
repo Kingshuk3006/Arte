@@ -1,5 +1,5 @@
 export default interface IUser {
-    userId?: string;
+    id?: string;
     name: string;
     image: string;
     email: string;
@@ -30,7 +30,7 @@ export interface IOrder {
     status: "Pending" | "Processing" | 'Confirmed' | "Shipped" | "Out for Delivery" | "Delivered" | "Cancelled" | "Refunded" | "Returned" | "On Hold" | "Completed";
     orderTotal: number;
     orderNotes?: string
-    estimatedShippingDays : number;
+    estimatedShippingDays: number;
 }
 
 export interface IUserCart {
@@ -48,7 +48,7 @@ export interface IUserMailHistory {
 
 export interface IUserAuthCredentials {
     lastLoginTimestamp?: number;
-    hashedPassword: string;
+    password: string;
     expirationTimestamp?: number;
     sessionToken?: string;
 }
